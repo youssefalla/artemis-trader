@@ -29,7 +29,7 @@ export async function proxy(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
-  if (!user && pathname.startsWith("/dashboard")) {
+  if (!user && (pathname.startsWith("/dashboard") || pathname === "/onboarding")) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
   if (user && (pathname === "/login" || pathname === "/signup")) {
@@ -40,5 +40,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login", "/signup"],
+  matcher: ["/dashboard/:path*", "/onboarding", "/login", "/signup"],
 };
