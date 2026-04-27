@@ -901,9 +901,9 @@ body { overflow-x: clip; }
 }
 .dark .hero-bg .mesh {
   background:
-    radial-gradient(35% 30% at 25% 30%, rgba(212,175,55,.09), transparent 60%),
-    radial-gradient(30% 30% at 75% 25%, rgba(212,175,55,.05), transparent 60%),
-    radial-gradient(40% 35% at 60% 80%, rgba(212,175,55,.03), transparent 60%);
+    radial-gradient(35% 30% at 25% 30%, rgba(212,175,55,.18), transparent 60%),
+    radial-gradient(30% 30% at 75% 25%, rgba(212,175,55,.10), transparent 60%),
+    radial-gradient(40% 35% at 60% 80%, rgba(212,175,55,.06), transparent 60%);
   filter: blur(50px);
 }
 @keyframes drift {
