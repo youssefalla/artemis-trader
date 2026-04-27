@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
+import { cookies } from "next/headers";
 import { ThemeProvider } from "@/lib/theme";
 import "./globals.css";
 
@@ -33,19 +34,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cookieStore = await cookies();
+  const theme = cookieStore.get("artemis-theme")?.value ?? "light";
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={theme === "dark" ? "dark" : ""} suppressHydrationWarning>
       <head>
-        {/* Kill all transitions before ANY external CSS loads — prevents dark mode flash on refresh */}
-        <style id="no-trans" dangerouslySetInnerHTML={{ __html: `*,*::before,*::after{transition:none!important}` }} />
+        {/* Fallback for first-time visitors with no cookie — syncs localStorage → cookie */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){var t=localStorage.getItem('artemis-theme')||'light';document.documentElement.classList.toggle('dark',t==='dark');window.addEventListener('DOMContentLoaded',function(){setTimeout(function(){var s=document.getElementById('no-trans');if(s)s.remove();},150);});})()`,
+            __html: `(function(){var t=localStorage.getItem('artemis-theme');if(t){document.documentElement.classList.toggle('dark',t==='dark');document.cookie='artemis-theme='+t+';path=/;max-age=31536000;SameSite=Lax';}})()`,
           }}
         />
       </head>
