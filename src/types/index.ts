@@ -24,11 +24,11 @@ export interface TradeHistory {
   id: string;
   user_id: string;
   symbol: string;
-  direction: "buy" | "sell";
-  lots: number;
+  order_type: "BUY" | "SELL";
+  lot_size: number;
   open_price: number;
   close_price: number | null;
-  profit_loss: number | null;
+  profit: number | null;
   status: "open" | "closed";
   opened_at: string;
   closed_at: string | null;
