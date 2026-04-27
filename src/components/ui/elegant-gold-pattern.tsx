@@ -39,6 +39,7 @@ export function GoldGradientBg({ children }: GoldGradientBgProps) {
           inset: 0,
           zIndex: 0,
           pointerEvents: "none",
+          opacity: dark ? 0.3 : 1,
           background: dark
             ? "radial-gradient(100% 100% at 0% 0%, rgb(28, 22, 6) 0%, rgb(0, 0, 0) 100%)"
             : "radial-gradient(100% 100% at 0% 0%, rgb(255, 251, 228) 0%, rgb(255, 255, 255) 100%)",
