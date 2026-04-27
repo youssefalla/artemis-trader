@@ -41,10 +41,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Prevent flash of wrong theme */}
+        {/* Kill all transitions before ANY external CSS loads — prevents dark mode flash on refresh */}
+        <style id="no-trans" dangerouslySetInnerHTML={{ __html: `*,*::before,*::after{transition:none!important}` }} />
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){var t=localStorage.getItem('artemis-theme')||'light';var h=document.documentElement;h.classList.add('no-transition');h.classList.toggle('dark',t==='dark');window.addEventListener('DOMContentLoaded',function(){setTimeout(function(){h.classList.remove('no-transition');},100);});})()`,
+            __html: `(function(){var t=localStorage.getItem('artemis-theme')||'light';document.documentElement.classList.toggle('dark',t==='dark');window.addEventListener('DOMContentLoaded',function(){setTimeout(function(){var s=document.getElementById('no-trans');if(s)s.remove();},150);});})()`,
           }}
         />
       </head>
