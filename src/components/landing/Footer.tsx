@@ -3,11 +3,7 @@
 import Link from "next/link";
 
 const ArtemisLogo = () => (
-  <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
-    <circle cx="16" cy="16" r="14.5" stroke="#D4AF37" strokeWidth="1" />
-    <path d="M22 9 A 11 11 0 1 0 22 23 A 8 8 0 1 1 22 9 Z" fill="#D4AF37" />
-    <path d="M11 21 L21 11 M16 11 H21 V16" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
+  <img src="/logo.png" alt="Artemis" width={28} height={28} style={{ objectFit: "contain" }} />
 );
 
 export default function Footer() {
