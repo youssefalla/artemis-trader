@@ -44,6 +44,8 @@ export default function OnboardingPage() {
 
   function handleContinue() {
     setLoading(true);
+    // Set cookie so proxy knows onboarding is done — never redirect here again
+    document.cookie = "onboarding_done=true;path=/;max-age=31536000;SameSite=Lax";
     router.push("/dashboard");
   }
 
