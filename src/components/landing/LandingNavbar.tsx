@@ -40,13 +40,13 @@ export default function LandingNavbar() {
           alignItems: "center",
           gap: "1.5rem",
           position: "relative",
-          background: theme === "dark" ? "rgba(10,10,14,0.90)" : "rgba(248,248,246,0.92)",
-          backdropFilter: "blur(40px) saturate(180%)",
-          WebkitBackdropFilter: "blur(40px) saturate(180%)",
-          border: theme === "dark" ? "1px solid rgba(212,175,55,0.20)" : "1px solid rgba(255,255,255,0.80)",
+          background: theme === "dark" ? "rgba(8,8,12,0.45)" : "rgba(255,255,255,0.55)",
+          backdropFilter: "blur(28px) saturate(180%)",
+          WebkitBackdropFilter: "blur(28px) saturate(180%)",
+          border: theme === "dark" ? "1px solid rgba(212,175,55,0.12)" : "1px solid rgba(255,255,255,0.75)",
           boxShadow: theme === "dark"
-            ? "0 4px 20px -6px rgba(0,0,0,0.60), inset 0 1px 0 rgba(255,255,255,0.08)"
-            : "0 4px 20px -6px rgba(0,0,0,0.10), 0 1px 4px rgba(0,0,0,0.06), inset 2px 2px 1px rgba(255,255,255,0.90), inset -1px -1px 1px rgba(255,255,255,0.60)",
+            ? "0 2px 24px -8px rgba(0,0,0,0.50), inset 0 1px 0 rgba(255,255,255,0.05), inset 0 -1px 0 rgba(212,175,55,0.06)"
+            : "0 2px 24px -8px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04), inset 2px 2px 1px rgba(255,255,255,0.95), inset -1px -1px 1px rgba(255,255,255,0.65)",
         }}
       >
         {/* Logo */}
