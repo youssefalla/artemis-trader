@@ -43,10 +43,10 @@ export default function LandingNavbar() {
           background: theme === "dark" ? "rgba(8,8,12,0.45)" : "rgba(255,255,255,0.55)",
           backdropFilter: "blur(28px) saturate(180%)",
           WebkitBackdropFilter: "blur(28px) saturate(180%)",
-          border: theme === "dark" ? "1px solid rgba(212,175,55,0.12)" : "1px solid rgba(255,255,255,0.75)",
+          border: theme === "dark" ? "1px solid rgba(212,175,55,0.12)" : "1px solid rgba(0,0,0,0.06)",
           boxShadow: theme === "dark"
             ? "0 2px 24px -8px rgba(0,0,0,0.50), inset 0 1px 0 rgba(255,255,255,0.05), inset 0 -1px 0 rgba(212,175,55,0.06)"
-            : "0 2px 24px -8px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04), inset 2px 2px 1px rgba(255,255,255,0.95), inset -1px -1px 1px rgba(255,255,255,0.65)",
+            : "0 2px 24px -8px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04)",
         }}
       >
         {/* Logo */}
