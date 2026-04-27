@@ -44,7 +44,7 @@ export default function RootLayout({
         {/* Prevent flash of wrong theme */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){var t=localStorage.getItem('artemis-theme')||'light';var h=document.documentElement;h.classList.toggle('dark',t==='dark');h.classList.add('no-transition');requestAnimationFrame(function(){requestAnimationFrame(function(){h.classList.remove('no-transition');});});})()`,
+            __html: `(function(){var t=localStorage.getItem('artemis-theme')||'light';var h=document.documentElement;h.classList.add('no-transition');h.classList.toggle('dark',t==='dark');window.addEventListener('DOMContentLoaded',function(){setTimeout(function(){h.classList.remove('no-transition');},100);});})()`,
           }}
         />
       </head>
