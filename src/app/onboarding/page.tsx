@@ -8,6 +8,7 @@ import { GoldGradientBg } from "@/components/ui/elegant-gold-pattern";
 import GlassFilter from "@/components/landing/GlassFilter";
 
 const XM_AFFILIATE_LINK = "https://affs.click/aXCBi";
+const EXNESS_AFFILIATE_LINK = "https://one.exnessonelink.com/a/c_a66g6ozd8h";
 
 const steps = [
   {
@@ -34,12 +35,13 @@ const steps = [
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const [brokerOpened, setBrokerOpened] = useState(false);
+  const [brokerOpened, setBrokerOpened] = useState<"xm" | "exness" | null>(null);
   const [loading, setLoading] = useState(false);
 
-  function handleOpenBroker() {
-    window.open(XM_AFFILIATE_LINK, "_blank", "noopener,noreferrer");
-    setBrokerOpened(true);
+  function handleOpenBroker(broker: "xm" | "exness") {
+    const link = broker === "xm" ? XM_AFFILIATE_LINK : EXNESS_AFFILIATE_LINK;
+    window.open(link, "_blank", "noopener,noreferrer");
+    setBrokerOpened(broker);
   }
 
   function handleContinue() {
@@ -130,7 +132,7 @@ export default function OnboardingPage() {
           }}
         >
           {steps.map((step, i) => {
-            const isDone = step.done || (i === 1 && brokerOpened);
+            const isDone = step.done || (i === 1 && brokerOpened !== null);
             return (
               <div
                 key={step.number}
@@ -196,37 +198,66 @@ export default function OnboardingPage() {
 
                     {/* Step 2 action */}
                     {step.action && (
-                      <div style={{ marginTop: "1.25rem", display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
-                        <button
-                          onClick={handleOpenBroker}
-                          className="btn-gold"
-                          style={{
-                            borderRadius: "9999px",
-                            padding: "0.625rem 1.25rem",
-                            fontSize: "0.875rem",
-                            fontWeight: 600,
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: "0.5rem",
-                            cursor: "pointer",
-                            border: "none",
-                          }}
-                        >
-                          <ExternalLink size={14} />
-                          Open XM Account
-                        </button>
-                        {brokerOpened && (
-                          <span
+                      <div style={{ marginTop: "1.25rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                        <p style={{ margin: 0, fontSize: "0.8125rem", color: "rgba(245,244,238,0.45)" }}>
+                          Choose your broker — both are supported by Artemis:
+                        </p>
+                        <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
+                          {/* XM */}
+                          <button
+                            onClick={() => handleOpenBroker("xm")}
                             style={{
-                              fontSize: "0.8125rem",
-                              color: "#D4AF37",
-                              display: "flex",
+                              borderRadius: "9999px",
+                              padding: "0.625rem 1.25rem",
+                              fontSize: "0.875rem",
+                              fontWeight: 600,
+                              display: "inline-flex",
                               alignItems: "center",
-                              gap: "0.375rem",
+                              gap: "0.5rem",
+                              cursor: "pointer",
+                              background: brokerOpened === "xm"
+                                ? "linear-gradient(180deg,#E6C75A 0%,#D4AF37 55%,#B8941F 100%)"
+                                : "rgba(212,175,55,0.12)",
+                              border: "1px solid rgba(212,175,55,0.40)",
+                              color: brokerOpened === "xm" ? "#0A0A0A" : "#D4AF37",
+                              transition: "all 0.2s",
                             }}
                           >
-                            <CheckCircle size={14} />
-                            Link opened — complete your registration
+                            <ExternalLink size={14} />
+                            Open XM Account
+                            {brokerOpened === "xm" && <CheckCircle size={13} />}
+                          </button>
+
+                          {/* Exness */}
+                          <button
+                            onClick={() => handleOpenBroker("exness")}
+                            style={{
+                              borderRadius: "9999px",
+                              padding: "0.625rem 1.25rem",
+                              fontSize: "0.875rem",
+                              fontWeight: 600,
+                              display: "inline-flex",
+                              alignItems: "center",
+                              gap: "0.5rem",
+                              cursor: "pointer",
+                              background: brokerOpened === "exness"
+                                ? "linear-gradient(180deg,#E6C75A 0%,#D4AF37 55%,#B8941F 100%)"
+                                : "rgba(212,175,55,0.12)",
+                              border: "1px solid rgba(212,175,55,0.40)",
+                              color: brokerOpened === "exness" ? "#0A0A0A" : "#D4AF37",
+                              transition: "all 0.2s",
+                            }}
+                          >
+                            <ExternalLink size={14} />
+                            Open Exness Account
+                            {brokerOpened === "exness" && <CheckCircle size={13} />}
+                          </button>
+                        </div>
+
+                        {brokerOpened && (
+                          <span style={{ fontSize: "0.8125rem", color: "#D4AF37", display: "flex", alignItems: "center", gap: "0.375rem" }}>
+                            <CheckCircle size={13} />
+                            Link opened — complete your registration then come back
                           </span>
                         )}
                       </div>
