@@ -33,6 +33,10 @@ function SpaceBg({ dark }: { dark: boolean }) {
           0%, 100% { opacity: 0.55; }
           50%       { opacity: 1; }
         }
+        @keyframes arcFloat {
+          0%, 100% { transform: translateX(-50%) translateY(0px); }
+          50%       { transform: translateX(-50%) translateY(-18px); }
+        }
       `}</style>
 
       <div style={{ position: "absolute", inset: 0, background: `conic-gradient(from 0deg at 50% 57%, transparent 0deg, rgba(${r},${wingEdge}) 295deg, rgba(${r},${wingMid}) 306deg, rgba(${w},${wingCore}) 315deg, rgba(${r},${wingMid}) 324deg, rgba(${r},${wingEdge}) 335deg, transparent 360deg)`, filter: "blur(18px)", animation: "wingBreathL 6s ease-in-out infinite", transformOrigin: "50% 57%" }} />
@@ -40,8 +44,8 @@ function SpaceBg({ dark }: { dark: boolean }) {
       <div style={{ position: "absolute", inset: 0, background: `conic-gradient(from 0deg at 50% 57%, transparent 0deg, rgba(${r},${wingGlow}) 280deg, rgba(${r},${wingOuter}) 315deg, rgba(${r},${wingGlow}) 350deg, transparent 360deg)`, filter: "blur(40px)", animation: "wingGlowPulse 6s ease-in-out infinite" }} />
       <div style={{ position: "absolute", inset: 0, background: `conic-gradient(from 0deg at 50% 57%, transparent 0deg, rgba(${r},${wingGlow}) 10deg, rgba(${r},${wingOuter}) 45deg, rgba(${r},${wingGlow}) 80deg, transparent 360deg)`, filter: "blur(40px)", animation: "wingGlowPulse 6s ease-in-out infinite 3s" }} />
 
-      <div style={{ position: "absolute", left: "50%", top: "57%", width: "220vw", height: "220vw", transform: "translateX(-50%)", borderRadius: "50%", border: `1px solid ${arc}`, boxShadow: dark ? `0 0 8px rgba(212,175,55,0.22), 0 0 25px rgba(212,175,55,0.10), 0 0 60px rgba(212,175,55,0.04)` : `0 0 12px rgba(140,95,0,0.35), 0 0 35px rgba(140,95,0,0.15), 0 0 80px rgba(140,95,0,0.06)` }} />
-      <div style={{ position: "absolute", left: "50%", top: "57%", width: "220vw", height: "220vw", transform: "translateX(-50%)", borderRadius: "50%", boxShadow: dark ? `inset 0 3px 30px rgba(212,175,55,0.08), inset 0 1px 60px rgba(255,220,60,0.04)` : `inset 0 3px 40px rgba(160,110,0,0.12), inset 0 1px 80px rgba(190,140,10,0.06)` }} />
+      <div style={{ position: "absolute", left: "50%", top: "57%", width: "220vw", height: "220vw", transform: "translateX(-50%)", borderRadius: "50%", border: `1px solid ${arc}`, boxShadow: dark ? `0 0 8px rgba(212,175,55,0.22), 0 0 25px rgba(212,175,55,0.10), 0 0 60px rgba(212,175,55,0.04)` : `0 0 12px rgba(140,95,0,0.35), 0 0 35px rgba(140,95,0,0.15), 0 0 80px rgba(140,95,0,0.06)`, animation: "arcFloat 8s ease-in-out infinite" }} />
+      <div style={{ position: "absolute", left: "50%", top: "57%", width: "220vw", height: "220vw", transform: "translateX(-50%)", borderRadius: "50%", boxShadow: dark ? `inset 0 3px 30px rgba(212,175,55,0.08), inset 0 1px 60px rgba(255,220,60,0.04)` : `inset 0 3px 40px rgba(160,110,0,0.12), inset 0 1px 80px rgba(190,140,10,0.06)`, animation: "arcFloat 8s ease-in-out infinite" }} />
 
       <div style={{ position: "absolute", left: "50%", top: "57%", width: "320px", height: "320px", transform: "translate(-50%, -50%)", borderRadius: "50%", background: dark ? `radial-gradient(circle, rgba(255,255,220,0.85) 0%, rgba(255,235,90,0.55) 4%, rgba(212,175,55,0.25) 12%, rgba(212,175,55,0.07) 35%, transparent 65%)` : `radial-gradient(circle, rgba(255,240,150,0.95) 0%, rgba(210,160,20,0.75) 4%, rgba(160,110,0,0.40) 12%, rgba(160,110,0,0.10) 35%, transparent 65%)`, filter: "blur(3px)" }} />
       <div style={{ position: "absolute", left: "50%", top: "57%", width: "600px", height: "600px", transform: "translate(-50%, -50%)", borderRadius: "50%", background: dark ? `radial-gradient(circle, rgba(212,175,55,0.10) 0%, rgba(212,175,55,0.02) 40%, transparent 70%)` : `radial-gradient(circle, rgba(160,110,0,0.14) 0%, rgba(160,110,0,0.04) 40%, transparent 70%)`, filter: "blur(20px)" }} />

@@ -39,6 +39,10 @@ function SpaceBg({ dark }: { dark: boolean }) {
           0%, 100% { opacity: 0.55; }
           50%       { opacity: 1; }
         }
+        @keyframes arcFloat {
+          0%, 100% { transform: translateX(-50%) translateY(0px); }
+          50%       { transform: translateX(-50%) translateY(-18px); }
+        }
       `}</style>
 
       {/* Left wing */}
@@ -108,6 +112,7 @@ function SpaceBg({ dark }: { dark: boolean }) {
         boxShadow: dark
           ? `0 0 8px rgba(212,175,55,0.22), 0 0 25px rgba(212,175,55,0.10), 0 0 60px rgba(212,175,55,0.04)`
           : `0 0 12px rgba(140,95,0,0.35), 0 0 35px rgba(140,95,0,0.15), 0 0 80px rgba(140,95,0,0.06)`,
+        animation: "arcFloat 8s ease-in-out infinite",
       }} />
 
       {/* Atmosphere glow along arc */}
@@ -118,6 +123,7 @@ function SpaceBg({ dark }: { dark: boolean }) {
         boxShadow: dark
           ? `inset 0 3px 30px rgba(212,175,55,0.08), inset 0 1px 60px rgba(255,220,60,0.04)`
           : `inset 0 3px 40px rgba(160,110,0,0.12), inset 0 1px 80px rgba(190,140,10,0.06)`,
+        animation: "arcFloat 8s ease-in-out infinite",
       }} />
 
       {/* Central burst */}
