@@ -1,42 +1,43 @@
-import { createAdminClient } from "@/lib/supabase/admin";
+"use client";
+
+import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
 
 type User = { id: string; email: string; full_name: string | null; xm_account_id: string | null; subscription_status: string; is_verified_affiliate: boolean; created_at: string };
 
-export default async function AdminUsersPage() {
-  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    return (
-      <div style={{ padding: "2rem", borderRadius: "1rem", background: "rgba(220,38,38,0.08)", border: "1px solid rgba(220,38,38,0.25)", color: "#f87171", fontFamily: "monospace" }}>
-        SUPABASE_SERVICE_ROLE_KEY missing — add it in Vercel env vars then redeploy.
-      </div>
-    );
-  }
+export default function AdminUsersPage() {
+  const [users,   setUsers]   = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error,   setError]   = useState<string | null>(null);
 
-  let users: User[] = [];
-  try {
-    const admin = createAdminClient();
-    const { data, error } = await admin
-      .from("profiles")
-      .select("id, email, full_name, xm_account_id, subscription_status, is_verified_affiliate, created_at")
-      .order("created_at", { ascending: false });
-    if (error) throw new Error(error.message);
-    users = (data ?? []) as User[];
-  } catch (e: unknown) {
-    return (
-      <div style={{ padding: "2rem", borderRadius: "1rem", background: "rgba(220,38,38,0.08)", border: "1px solid rgba(220,38,38,0.25)", color: "#f87171", fontFamily: "monospace" }}>
-        Error: {e instanceof Error ? e.message : String(e)}
-      </div>
-    );
-  }
+  useEffect(() => {
+    fetch("/api/admin/users")
+      .then(r => r.json())
+      .then(data => {
+        if (data.error) setError(data.error);
+        else setUsers(data);
+      })
+      .catch(e => setError(e.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return (
+    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "3rem", color: "var(--text-secondary)" }}>
+      <Loader2 size={20} className="animate-spin" /> Loading users…
+    </div>
+  );
+
+  if (error) return (
+    <div style={{ padding: "2rem", borderRadius: "1rem", background: "rgba(220,38,38,0.08)", border: "1px solid rgba(220,38,38,0.25)", color: "#f87171", fontFamily: "monospace" }}>
+      Error: {error}
+    </div>
+  );
 
   return (
     <div style={{ maxWidth: "80rem", margin: "0 auto" }}>
-      <div style={{ marginBottom: "2rem", display: "flex", alignItems: "flex-end", justifyContent: "space-between" }}>
-        <div>
-          <h1 className="font-display" style={{ fontSize: "1.75rem", fontWeight: 700, color: "var(--text-primary)", margin: 0 }}>All Users</h1>
-          <p style={{ color: "var(--text-secondary)", marginTop: "0.35rem", fontSize: "0.9rem" }}>
-            {users.length} total users on the platform.
-          </p>
-        </div>
+      <div style={{ marginBottom: "2rem" }}>
+        <h1 className="font-display" style={{ fontSize: "1.75rem", fontWeight: 700, color: "var(--text-primary)", margin: 0 }}>All Users</h1>
+        <p style={{ color: "var(--text-secondary)", marginTop: "0.35rem", fontSize: "0.9rem" }}>{users.length} total users on the platform.</p>
       </div>
 
       <div className="bento" style={{ borderRadius: "1.25rem", overflow: "hidden" }}>
@@ -56,8 +57,8 @@ export default async function AdminUsersPage() {
                 {users.map((u, i) => (
                   <tr key={u.id}
                     style={{ borderBottom: i < users.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none", transition: "background 0.15s" }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(212,175,55,0.03)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+                    onMouseEnter={e => (e.currentTarget.style.background = "rgba(212,175,55,0.03)")}
+                    onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
                   >
                     <td style={{ padding: "0.8rem 1.125rem", fontSize: "0.75rem", color: "var(--text-secondary)", fontFamily: "monospace" }}>{i + 1}</td>
                     <td style={{ padding: "0.8rem 1.125rem", fontSize: "0.85rem", color: "var(--text-primary)", fontWeight: 500 }}>{u.email}</td>
@@ -75,9 +76,7 @@ export default async function AdminUsersPage() {
                              : u.subscription_status === "trial"     ? "#818cf8"
                              : u.subscription_status === "cancelled" ? "#f87171"
                              : "var(--text-secondary)",
-                      }}>
-                        {u.subscription_status}
-                      </span>
+                      }}>{u.subscription_status}</span>
                     </td>
                     <td style={{ padding: "0.8rem 1.125rem" }}>
                       {u.is_verified_affiliate

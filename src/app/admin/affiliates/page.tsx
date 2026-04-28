@@ -1,38 +1,55 @@
-import { createAdminClient } from "@/lib/supabase/admin";
+"use client";
+
+import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
 import InviteClient from "./_InviteClient";
 
-export default async function AdminAffiliatesPage() {
-  const admin = createAdminClient();
+type Affiliate = { id: string; code: string; commission_rate: number; tier: string | null; total_clicks: number; total_referrals: number; total_conversions: number; total_earned: number; total_paid: number };
+type Profile   = { id: string; email: string; full_name: string | null };
 
-  const { data: affiliates } = await admin
-    .from("affiliates")
-    .select("id, code, commission_rate, tier, total_clicks, total_referrals, total_conversions, total_earned, total_paid")
-    .order("total_earned", { ascending: false });
+export default function AdminAffiliatesPage() {
+  const [affiliates, setAffiliates] = useState<Affiliate[]>([]);
+  const [profiles,   setProfiles]   = useState<Profile[]>([]);
+  const [loading,    setLoading]    = useState(true);
+  const [error,      setError]      = useState<string | null>(null);
 
-  const { data: profiles } = await admin
-    .from("profiles")
-    .select("id, email, full_name");
+  useEffect(() => {
+    fetch("/api/admin/affiliates")
+      .then(r => r.json())
+      .then(data => {
+        if (data.error) setError(data.error);
+        else { setAffiliates(data.affiliates ?? []); setProfiles(data.profiles ?? []); }
+      })
+      .catch(e => setError(e.message))
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return (
+    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "3rem", color: "var(--text-secondary)" }}>
+      <Loader2 size={20} className="animate-spin" /> Loading affiliates…
+    </div>
+  );
 
   return (
     <div style={{ maxWidth: "80rem", margin: "0 auto" }}>
       <div style={{ marginBottom: "2rem" }}>
         <h1 className="font-display" style={{ fontSize: "1.75rem", fontWeight: 700, color: "var(--text-primary)", margin: 0 }}>Affiliates</h1>
-        <p style={{ color: "var(--text-secondary)", marginTop: "0.35rem", fontSize: "0.9rem" }}>
-          Manage influencers and send invites.
-        </p>
+        <p style={{ color: "var(--text-secondary)", marginTop: "0.35rem", fontSize: "0.9rem" }}>Manage influencers and send invites.</p>
       </div>
 
-      {/* Invite form */}
-      <div style={{ marginBottom: "2rem" }}>
-        <InviteClient />
-      </div>
+      <div style={{ marginBottom: "2rem" }}><InviteClient /></div>
 
-      {/* Affiliates table */}
+      {error && (
+        <div style={{ marginBottom: "1rem", padding: "1rem", borderRadius: "0.875rem", background: "rgba(220,38,38,0.08)", border: "1px solid rgba(220,38,38,0.25)", color: "#f87171", fontFamily: "monospace", fontSize: "0.85rem" }}>
+          Error loading affiliates: {error}
+        </div>
+      )}
+
       <div className="bento" style={{ borderRadius: "1.25rem", overflow: "hidden" }}>
         <p className="font-mono" style={{ fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-secondary)", padding: "1.25rem 1.5rem 0.875rem" }}>
-          All Affiliates — {affiliates?.length ?? 0} total
+          All Affiliates — {affiliates.length} total
         </p>
-        {!affiliates?.length ? (
+        {!affiliates.length ? (
           <div style={{ textAlign: "center", padding: "4rem", color: "var(--text-secondary)" }}>No affiliates yet. Send your first invite above.</div>
         ) : (
           <div style={{ overflowX: "auto" }}>
@@ -46,7 +63,7 @@ export default async function AdminAffiliatesPage() {
               </thead>
               <tbody>
                 {affiliates.map((a, i) => {
-                  const profile = profiles?.find(p => p.id === a.id);
+                  const profile   = profiles.find(p => p.id === a.id);
                   const available = (a.total_earned ?? 0) - (a.total_paid ?? 0);
                   return (
                     <tr key={a.id}
@@ -54,7 +71,10 @@ export default async function AdminAffiliatesPage() {
                       onMouseEnter={e => (e.currentTarget.style.background = "rgba(212,175,55,0.03)")}
                       onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
                     >
-                      <td style={{ padding: "0.8rem 1.125rem", fontSize: "0.85rem", color: "var(--text-primary)" }}>{profile?.email ?? "—"}{profile?.full_name ? <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", marginLeft: "0.5rem" }}>({profile.full_name})</span> : null}</td>
+                      <td style={{ padding: "0.8rem 1.125rem", fontSize: "0.85rem", color: "var(--text-primary)" }}>
+                        {profile?.email ?? "—"}
+                        {profile?.full_name && <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", marginLeft: "0.5rem" }}>({profile.full_name})</span>}
+                      </td>
                       <td style={{ padding: "0.8rem 1.125rem" }}>
                         <span style={{ fontSize: "0.8rem", fontFamily: "monospace", fontWeight: 700, color: "#D4AF37", padding: "0.2rem 0.5rem", borderRadius: "0.5rem", background: "rgba(212,175,55,0.10)" }}>{a.code}</span>
                       </td>
