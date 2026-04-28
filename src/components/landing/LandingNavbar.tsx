@@ -21,6 +21,14 @@ const MoonIcon = () => (
   </svg>
 );
 
+function scrollTo(id: string) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const offset = 88; // fixed navbar height
+  const top = el.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({ top, behavior: "smooth" });
+}
+
 export default function LandingNavbar() {
   const { theme, toggle } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -59,16 +67,16 @@ export default function LandingNavbar() {
 
         {/* Desktop links */}
         <ul className="hidden md:flex" style={{ alignItems: "center", gap: "1.75rem", listStyle: "none", margin: 0, padding: 0, marginLeft: "auto" }}>
-          {[["Features", "#features"], ["How it works", "#how"], ["Pricing", "#pricing"], ["Voices", "#voices"]].map(([label, href]) => (
-            <li key={href}>
-              <a
-                href={href}
-                style={{ fontSize: "0.875rem", color: "var(--text-secondary)", textDecoration: "none", transition: "color 0.2s" }}
-                onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "var(--text-primary)")}
-                onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--text-secondary)")}
+          {[["Features", "features"], ["How it works", "how"], ["Pricing", "pricing"], ["Voices", "voices"]].map(([label, id]) => (
+            <li key={id}>
+              <button
+                onClick={() => scrollTo(id)}
+                style={{ fontSize: "0.875rem", color: "var(--text-secondary)", textDecoration: "none", transition: "color 0.2s", background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "inherit" }}
+                onMouseEnter={(e) => ((e.currentTarget).style.color = "var(--text-primary)")}
+                onMouseLeave={(e) => ((e.currentTarget).style.color = "var(--text-secondary)")}
               >
                 {label}
-              </a>
+              </button>
             </li>
           ))}
         </ul>
@@ -125,15 +133,14 @@ export default function LandingNavbar() {
             display: "flex", flexDirection: "column", gap: "1rem",
           }}
         >
-          {[["Features", "#features"], ["How it works", "#how"], ["Pricing", "#pricing"], ["Voices", "#voices"]].map(([label, href]) => (
-            <a
-              key={href}
-              href={href}
-              onClick={() => setMobileOpen(false)}
-              style={{ fontSize: "0.9rem", color: "var(--text-secondary)", textDecoration: "none" }}
+          {[["Features", "features"], ["How it works", "how"], ["Pricing", "pricing"], ["Voices", "voices"]].map(([label, id]) => (
+            <button
+              key={id}
+              onClick={() => { scrollTo(id); setMobileOpen(false); }}
+              style={{ fontSize: "0.9rem", color: "var(--text-secondary)", textDecoration: "none", background: "none", border: "none", cursor: "pointer", padding: 0, fontFamily: "inherit", textAlign: "left" }}
             >
               {label}
-            </a>
+            </button>
           ))}
           <div style={{ display: "flex", gap: "0.75rem", paddingTop: "0.5rem" }}>
             <Link href="/login" style={{ flex: 1, textAlign: "center", fontSize: "0.875rem", padding: "0.625rem 1rem", border: "1px solid var(--border)", borderRadius: "9999px", color: "var(--text-primary)", textDecoration: "none" }}>
