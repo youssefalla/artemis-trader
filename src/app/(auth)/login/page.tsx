@@ -167,9 +167,16 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) { setError(error.message); setLoading(false); return; }
-    router.push("/dashboard");
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("is_verified_affiliate")
+      .eq("id", data.user.id)
+      .single();
+
+    router.push(profile?.is_verified_affiliate ? "/affiliate/dashboard" : "/dashboard");
     router.refresh();
   }
 
