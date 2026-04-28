@@ -24,9 +24,25 @@ const MoonIcon = () => (
 function scrollTo(id: string) {
   const el = document.getElementById(id);
   if (!el) return;
-  const offset = 88; // fixed navbar height
-  const top = el.getBoundingClientRect().top + window.scrollY - offset;
-  window.scrollTo({ top, behavior: "smooth" });
+  const target = el.getBoundingClientRect().top + window.scrollY - 88;
+  const start = window.scrollY;
+  const distance = target - start;
+  const duration = 900;
+  let startTime: number | null = null;
+
+  function easeInOutCubic(t: number) {
+    return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  }
+
+  function step(timestamp: number) {
+    if (!startTime) startTime = timestamp;
+    const elapsed = timestamp - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    window.scrollTo(0, start + distance * easeInOutCubic(progress));
+    if (progress < 1) requestAnimationFrame(step);
+  }
+
+  requestAnimationFrame(step);
 }
 
 export default function LandingNavbar() {
