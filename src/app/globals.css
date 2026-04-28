@@ -47,7 +47,7 @@
 }
 
 html, body {
-  background-color: transparent;
+  background-color: var(--background);
   color: var(--text-primary);
   font-family: var(--font-display, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif);
   font-feature-settings: "ss01", "cv11";
