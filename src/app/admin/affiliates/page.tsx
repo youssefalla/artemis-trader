@@ -6,8 +6,12 @@ export default async function AdminAffiliatesPage() {
 
   const { data: affiliates } = await admin
     .from("affiliates")
-    .select("id, code, commission_rate, tier, total_clicks, total_referrals, total_conversions, total_earned, total_paid, profiles(email, full_name)")
+    .select("id, code, commission_rate, tier, total_clicks, total_referrals, total_conversions, total_earned, total_paid")
     .order("total_earned", { ascending: false });
+
+  const { data: profiles } = await admin
+    .from("profiles")
+    .select("id, email, full_name");
 
   return (
     <div style={{ maxWidth: "80rem", margin: "0 auto" }}>
@@ -42,8 +46,7 @@ export default async function AdminAffiliatesPage() {
               </thead>
               <tbody>
                 {affiliates.map((a, i) => {
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  const profile = a.profiles as any;
+                  const profile = profiles?.find(p => p.id === a.id);
                   const available = (a.total_earned ?? 0) - (a.total_paid ?? 0);
                   return (
                     <tr key={a.id}
@@ -51,7 +54,7 @@ export default async function AdminAffiliatesPage() {
                       onMouseEnter={e => (e.currentTarget.style.background = "rgba(212,175,55,0.03)")}
                       onMouseLeave={e => (e.currentTarget.style.background = "transparent")}
                     >
-                      <td style={{ padding: "0.8rem 1.125rem", fontSize: "0.85rem", color: "var(--text-primary)" }}>{profile?.email ?? "—"}</td>
+                      <td style={{ padding: "0.8rem 1.125rem", fontSize: "0.85rem", color: "var(--text-primary)" }}>{profile?.email ?? "—"}{profile?.full_name ? <span style={{ fontSize: "0.75rem", color: "var(--text-secondary)", marginLeft: "0.5rem" }}>({profile.full_name})</span> : null}</td>
                       <td style={{ padding: "0.8rem 1.125rem" }}>
                         <span style={{ fontSize: "0.8rem", fontFamily: "monospace", fontWeight: 700, color: "#D4AF37", padding: "0.2rem 0.5rem", borderRadius: "0.5rem", background: "rgba(212,175,55,0.10)" }}>{a.code}</span>
                       </td>
