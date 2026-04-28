@@ -405,9 +405,9 @@ body { overflow-x: clip; }
   transform: rotateX(14deg) rotateY(-10deg) rotateZ(1deg);
   transform-style: preserve-3d;
   box-shadow:
-    0 80px 120px -50px rgba(10,10,10,.18),
-    0 40px 80px  -40px rgba(10,10,10,.10),
-    0 20px 40px  -25px rgba(212,175,55,.18),
+    0 60px 160px  0px rgba(10,10,10,.07),
+    0 30px 80px   0px rgba(10,10,10,.05),
+    0 10px 30px   0px rgba(212,175,55,.08),
     inset 0 1px 0 rgba(255,255,255,.6);
   border: 1px solid rgba(10,10,10,.08);
   background: linear-gradient(180deg, #ffffff 0%, #FAFAF7 100%);
@@ -417,9 +417,9 @@ body { overflow-x: clip; }
   background: linear-gradient(180deg, #15151A 0%, #0E0E12 100%);
   border-color: rgba(212,175,55,.20);
   box-shadow:
-    0 80px 120px -50px rgba(0,0,0,.55),
-    0 40px 80px  -40px rgba(0,0,0,.35),
-    0 20px 40px  -25px rgba(212,175,55,.18),
+    0 60px 160px  0px rgba(0,0,0,.30),
+    0 30px 80px   0px rgba(0,0,0,.18),
+    0 10px 30px   0px rgba(212,175,55,.10),
     inset 0 1px 0 rgba(255,255,255,.04);
 }
 
