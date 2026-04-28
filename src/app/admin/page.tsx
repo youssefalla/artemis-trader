@@ -1,13 +1,10 @@
-import { createAdminClient } from "@/lib/supabase/admin";
-import { Users, UserCheck, TrendingUp, DollarSign } from "lucide-react";
+"use client";
 
-function ErrorBox({ msg }: { msg: string }) {
-  return (
-    <div style={{ padding: "2rem", borderRadius: "1rem", background: "rgba(220,38,38,0.08)", border: "1px solid rgba(220,38,38,0.25)", color: "#f87171", fontFamily: "monospace", fontSize: "0.85rem" }}>
-      <strong>Admin Error:</strong> {msg}
-    </div>
-  );
-}
+import { useEffect, useState } from "react";
+import { Users, UserCheck, TrendingUp, DollarSign, Loader2 } from "lucide-react";
+
+type Profile   = { id: string; email: string; full_name: string | null; subscription_status: string; is_verified_affiliate: boolean; created_at: string };
+type Affiliate = { id: string; code: string; total_earned: number; total_clicks: number; total_referrals: number; total_conversions: number };
 
 function StatCard({ label, value, sub, icon: Icon, gold }: { label: string; value: string | number; sub?: string; icon: React.ElementType; gold?: boolean }) {
   return (
@@ -24,38 +21,41 @@ function StatCard({ label, value, sub, icon: Icon, gold }: { label: string; valu
   );
 }
 
-export default async function AdminOverviewPage() {
-  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
-    return <ErrorBox msg="SUPABASE_SERVICE_ROLE_KEY is not set in environment variables. Add it in Vercel → Settings → Environment Variables, then redeploy." />;
-  }
+export default function AdminOverviewPage() {
+  const [profiles,   setProfiles]   = useState<Profile[]>([]);
+  const [affiliates, setAffiliates] = useState<Affiliate[]>([]);
+  const [loading,    setLoading]    = useState(true);
+  const [error,      setError]      = useState<string | null>(null);
 
-  let profiles: unknown[] = [];
-  let affiliates: unknown[] = [];
+  useEffect(() => {
+    fetch("/api/admin/stats")
+      .then(r => r.json())
+      .then(data => {
+        if (data.error) setError(data.error);
+        else { setProfiles(data.profiles ?? []); setAffiliates(data.affiliates ?? []); }
+      })
+      .catch(e => setError(e.message))
+      .finally(() => setLoading(false));
+  }, []);
 
-  try {
-    const admin = createAdminClient();
-    const [p, a] = await Promise.all([
-      admin.from("profiles").select("id, email, full_name, subscription_status, is_verified_affiliate, created_at"),
-      admin.from("affiliates").select("id, code, total_earned, total_clicks, total_referrals, total_conversions"),
-    ]);
-    if (p.error) throw new Error("profiles: " + p.error.message);
-    if (a.error) throw new Error("affiliates: " + a.error.message);
-    profiles = p.data ?? [];
-    affiliates = a.data ?? [];
-  } catch (e: unknown) {
-    return <ErrorBox msg={e instanceof Error ? e.message : String(e)} />;
-  }
+  if (loading) return (
+    <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", padding: "3rem", color: "var(--text-secondary)" }}>
+      <Loader2 size={20} className="animate-spin" /> Loading…
+    </div>
+  );
 
-  const typedProfiles = profiles as Array<{ id: string; email: string; full_name: string | null; subscription_status: string; is_verified_affiliate: boolean; created_at: string }>;
-  const typedAffiliates = affiliates as Array<{ id: string; code: string; total_earned: number; total_clicks: number; total_referrals: number; total_conversions: number }>;
+  if (error) return (
+    <div style={{ padding: "2rem", borderRadius: "1rem", background: "rgba(220,38,38,0.08)", border: "1px solid rgba(220,38,38,0.25)", color: "#f87171", fontFamily: "monospace" }}>
+      Admin Error: {error}
+    </div>
+  );
 
-  const totalUsers       = typedProfiles.length;
-  const activeUsers      = typedProfiles.filter(p => p.subscription_status === "active").length;
-  const totalAffiliates  = typedAffiliates.length;
-  const totalEarned      = typedAffiliates.reduce((s, a) => s + (a.total_earned ?? 0), 0);
-  const totalClicks      = typedAffiliates.reduce((s, a) => s + (a.total_clicks ?? 0), 0);
-
-  const recentUsers = [...typedProfiles].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 8);
+  const totalUsers      = profiles.length;
+  const activeUsers     = profiles.filter(p => p.subscription_status === "active").length;
+  const totalAffiliates = affiliates.length;
+  const totalEarned     = affiliates.reduce((s, a) => s + (a.total_earned ?? 0), 0);
+  const totalReferrals  = affiliates.reduce((s, a) => s + (a.total_referrals ?? 0), 0);
+  const recentUsers     = [...profiles].slice(0, 8);
 
   return (
     <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
@@ -64,15 +64,13 @@ export default async function AdminOverviewPage() {
         <p style={{ color: "var(--text-secondary)", marginTop: "0.35rem", fontSize: "0.9rem" }}>Full platform visibility — everything in one place.</p>
       </div>
 
-      {/* Stats */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1rem", marginBottom: "2rem" }}>
-        <StatCard label="Total Users"       value={totalUsers}      sub={`${activeUsers} active`}    icon={Users}      />
-        <StatCard label="Affiliates"        value={totalAffiliates} sub={`${totalClicks} clicks`}    icon={UserCheck}  gold />
-        <StatCard label="Total Referrals"   value={typedAffiliates.reduce((s, a) => s + (a.total_referrals ?? 0), 0)} icon={TrendingUp} />
-        <StatCard label="Commission Paid Out" value={`$${totalEarned.toFixed(2)}`} icon={DollarSign} gold />
+        <StatCard label="Total Users"       value={totalUsers}      sub={`${activeUsers} active`}   icon={Users}      />
+        <StatCard label="Affiliates"        value={totalAffiliates} sub={`${affiliates.reduce((s,a)=>s+(a.total_clicks??0),0)} clicks`} icon={UserCheck} gold />
+        <StatCard label="Total Referrals"   value={totalReferrals}  icon={TrendingUp} />
+        <StatCard label="Commission Paid"   value={`$${totalEarned.toFixed(2)}`} icon={DollarSign} gold />
       </div>
 
-      {/* Recent signups */}
       <div className="bento" style={{ borderRadius: "1.25rem", overflow: "hidden" }}>
         <p className="font-mono" style={{ fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-secondary)", padding: "1.25rem 1.5rem 0.875rem" }}>
           Recent Signups
