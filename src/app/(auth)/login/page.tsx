@@ -26,6 +26,20 @@ function SpaceBg({ dark }: { dark: boolean }) {
       position: "fixed", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 0,
       background: dark ? "#000000" : "#f5f0d8",
     }}>
+      <style>{`
+        @keyframes wingBreathL {
+          0%, 100% { opacity: 0.6; transform: scaleY(0.97); }
+          50%       { opacity: 1;   transform: scaleY(1.03); }
+        }
+        @keyframes wingBreathR {
+          0%, 100% { opacity: 1;   transform: scaleY(1.03); }
+          50%       { opacity: 0.6; transform: scaleY(0.97); }
+        }
+        @keyframes wingGlowPulse {
+          0%, 100% { opacity: 0.55; }
+          50%       { opacity: 1; }
+        }
+      `}</style>
 
       {/* Left wing */}
       <div style={{
@@ -39,6 +53,8 @@ function SpaceBg({ dark }: { dark: boolean }) {
           rgba(${r},${wingEdge}) 335deg,
           transparent 360deg)`,
         filter: "blur(18px)",
+        animation: "wingBreathL 6s ease-in-out infinite",
+        transformOrigin: "50% 57%",
       }} />
 
       {/* Right wing */}
@@ -53,6 +69,8 @@ function SpaceBg({ dark }: { dark: boolean }) {
           rgba(${r},${wingEdge}) 65deg,
           transparent 360deg)`,
         filter: "blur(18px)",
+        animation: "wingBreathR 6s ease-in-out infinite",
+        transformOrigin: "50% 57%",
       }} />
 
       {/* Soft outer spread — left */}
@@ -65,6 +83,7 @@ function SpaceBg({ dark }: { dark: boolean }) {
           rgba(${r},${wingGlow}) 350deg,
           transparent 360deg)`,
         filter: "blur(40px)",
+        animation: "wingGlowPulse 6s ease-in-out infinite",
       }} />
 
       {/* Soft outer spread — right */}
@@ -77,6 +96,7 @@ function SpaceBg({ dark }: { dark: boolean }) {
           rgba(${r},${wingGlow}) 80deg,
           transparent 360deg)`,
         filter: "blur(40px)",
+        animation: "wingGlowPulse 6s ease-in-out infinite 3s",
       }} />
 
       {/* Planet arc */}

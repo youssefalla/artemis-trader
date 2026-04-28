@@ -20,11 +20,25 @@ function SpaceBg({ dark }: { dark: boolean }) {
 
   return (
     <div style={{ position: "fixed", inset: 0, overflow: "hidden", pointerEvents: "none", zIndex: 0, background: dark ? "#000000" : "#f5f0d8" }}>
+      <style>{`
+        @keyframes wingBreathL {
+          0%, 100% { opacity: 0.6; transform: scaleY(0.97); }
+          50%       { opacity: 1;   transform: scaleY(1.03); }
+        }
+        @keyframes wingBreathR {
+          0%, 100% { opacity: 1;   transform: scaleY(1.03); }
+          50%       { opacity: 0.6; transform: scaleY(0.97); }
+        }
+        @keyframes wingGlowPulse {
+          0%, 100% { opacity: 0.55; }
+          50%       { opacity: 1; }
+        }
+      `}</style>
 
-      <div style={{ position: "absolute", inset: 0, background: `conic-gradient(from 0deg at 50% 57%, transparent 0deg, rgba(${r},${wingEdge}) 295deg, rgba(${r},${wingMid}) 306deg, rgba(${w},${wingCore}) 315deg, rgba(${r},${wingMid}) 324deg, rgba(${r},${wingEdge}) 335deg, transparent 360deg)`, filter: "blur(18px)" }} />
-      <div style={{ position: "absolute", inset: 0, background: `conic-gradient(from 0deg at 50% 57%, transparent 0deg, rgba(${r},${wingEdge}) 25deg, rgba(${r},${wingMid}) 36deg, rgba(${w},${wingCore}) 45deg, rgba(${r},${wingMid}) 54deg, rgba(${r},${wingEdge}) 65deg, transparent 360deg)`, filter: "blur(18px)" }} />
-      <div style={{ position: "absolute", inset: 0, background: `conic-gradient(from 0deg at 50% 57%, transparent 0deg, rgba(${r},${wingGlow}) 280deg, rgba(${r},${wingOuter}) 315deg, rgba(${r},${wingGlow}) 350deg, transparent 360deg)`, filter: "blur(40px)" }} />
-      <div style={{ position: "absolute", inset: 0, background: `conic-gradient(from 0deg at 50% 57%, transparent 0deg, rgba(${r},${wingGlow}) 10deg, rgba(${r},${wingOuter}) 45deg, rgba(${r},${wingGlow}) 80deg, transparent 360deg)`, filter: "blur(40px)" }} />
+      <div style={{ position: "absolute", inset: 0, background: `conic-gradient(from 0deg at 50% 57%, transparent 0deg, rgba(${r},${wingEdge}) 295deg, rgba(${r},${wingMid}) 306deg, rgba(${w},${wingCore}) 315deg, rgba(${r},${wingMid}) 324deg, rgba(${r},${wingEdge}) 335deg, transparent 360deg)`, filter: "blur(18px)", animation: "wingBreathL 6s ease-in-out infinite", transformOrigin: "50% 57%" }} />
+      <div style={{ position: "absolute", inset: 0, background: `conic-gradient(from 0deg at 50% 57%, transparent 0deg, rgba(${r},${wingEdge}) 25deg, rgba(${r},${wingMid}) 36deg, rgba(${w},${wingCore}) 45deg, rgba(${r},${wingMid}) 54deg, rgba(${r},${wingEdge}) 65deg, transparent 360deg)`, filter: "blur(18px)", animation: "wingBreathR 6s ease-in-out infinite", transformOrigin: "50% 57%" }} />
+      <div style={{ position: "absolute", inset: 0, background: `conic-gradient(from 0deg at 50% 57%, transparent 0deg, rgba(${r},${wingGlow}) 280deg, rgba(${r},${wingOuter}) 315deg, rgba(${r},${wingGlow}) 350deg, transparent 360deg)`, filter: "blur(40px)", animation: "wingGlowPulse 6s ease-in-out infinite" }} />
+      <div style={{ position: "absolute", inset: 0, background: `conic-gradient(from 0deg at 50% 57%, transparent 0deg, rgba(${r},${wingGlow}) 10deg, rgba(${r},${wingOuter}) 45deg, rgba(${r},${wingGlow}) 80deg, transparent 360deg)`, filter: "blur(40px)", animation: "wingGlowPulse 6s ease-in-out infinite 3s" }} />
 
       <div style={{ position: "absolute", left: "50%", top: "57%", width: "220vw", height: "220vw", transform: "translateX(-50%)", borderRadius: "50%", border: `1px solid ${arc}`, boxShadow: dark ? `0 0 8px rgba(212,175,55,0.22), 0 0 25px rgba(212,175,55,0.10), 0 0 60px rgba(212,175,55,0.04)` : `0 0 12px rgba(140,95,0,0.35), 0 0 35px rgba(140,95,0,0.15), 0 0 80px rgba(140,95,0,0.06)` }} />
       <div style={{ position: "absolute", left: "50%", top: "57%", width: "220vw", height: "220vw", transform: "translateX(-50%)", borderRadius: "50%", boxShadow: dark ? `inset 0 3px 30px rgba(212,175,55,0.08), inset 0 1px 60px rgba(255,220,60,0.04)` : `inset 0 3px 40px rgba(160,110,0,0.12), inset 0 1px 80px rgba(190,140,10,0.06)` }} />
