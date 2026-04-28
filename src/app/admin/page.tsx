@@ -1,6 +1,14 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 import { Users, UserCheck, TrendingUp, DollarSign } from "lucide-react";
 
+function ErrorBox({ msg }: { msg: string }) {
+  return (
+    <div style={{ padding: "2rem", borderRadius: "1rem", background: "rgba(220,38,38,0.08)", border: "1px solid rgba(220,38,38,0.25)", color: "#f87171", fontFamily: "monospace", fontSize: "0.85rem" }}>
+      <strong>Admin Error:</strong> {msg}
+    </div>
+  );
+}
+
 function StatCard({ label, value, sub, icon: Icon, gold }: { label: string; value: string | number; sub?: string; icon: React.ElementType; gold?: boolean }) {
   return (
     <div className="bento" style={{ borderRadius: "1.25rem", padding: "1.25rem 1.5rem", border: gold ? "1px solid rgba(212,175,55,0.35)" : undefined, background: gold ? "rgba(212,175,55,0.06)" : undefined }}>
@@ -17,23 +25,37 @@ function StatCard({ label, value, sub, icon: Icon, gold }: { label: string; valu
 }
 
 export default async function AdminOverviewPage() {
-  const admin = createAdminClient();
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return <ErrorBox msg="SUPABASE_SERVICE_ROLE_KEY is not set in environment variables. Add it in Vercel → Settings → Environment Variables, then redeploy." />;
+  }
 
-  const [
-    { data: profiles },
-    { data: affiliates },
-  ] = await Promise.all([
-    admin.from("profiles").select("id, email, full_name, subscription_status, is_verified_affiliate, created_at"),
-    admin.from("affiliates").select("id, code, total_earned, total_clicks, total_referrals, total_conversions"),
-  ]);
+  let profiles: unknown[] = [];
+  let affiliates: unknown[] = [];
 
-  const totalUsers       = profiles?.length ?? 0;
-  const activeUsers      = profiles?.filter(p => p.subscription_status === "active").length ?? 0;
-  const totalAffiliates  = affiliates?.length ?? 0;
-  const totalEarned      = affiliates?.reduce((s, a) => s + (a.total_earned ?? 0), 0) ?? 0;
-  const totalClicks      = affiliates?.reduce((s, a) => s + (a.total_clicks ?? 0), 0) ?? 0;
+  try {
+    const admin = createAdminClient();
+    const [p, a] = await Promise.all([
+      admin.from("profiles").select("id, email, full_name, subscription_status, is_verified_affiliate, created_at"),
+      admin.from("affiliates").select("id, code, total_earned, total_clicks, total_referrals, total_conversions"),
+    ]);
+    if (p.error) throw new Error("profiles: " + p.error.message);
+    if (a.error) throw new Error("affiliates: " + a.error.message);
+    profiles = p.data ?? [];
+    affiliates = a.data ?? [];
+  } catch (e: unknown) {
+    return <ErrorBox msg={e instanceof Error ? e.message : String(e)} />;
+  }
 
-  const recentUsers = [...(profiles ?? [])].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 8);
+  const typedProfiles = profiles as Array<{ id: string; email: string; full_name: string | null; subscription_status: string; is_verified_affiliate: boolean; created_at: string }>;
+  const typedAffiliates = affiliates as Array<{ id: string; code: string; total_earned: number; total_clicks: number; total_referrals: number; total_conversions: number }>;
+
+  const totalUsers       = typedProfiles.length;
+  const activeUsers      = typedProfiles.filter(p => p.subscription_status === "active").length;
+  const totalAffiliates  = typedAffiliates.length;
+  const totalEarned      = typedAffiliates.reduce((s, a) => s + (a.total_earned ?? 0), 0);
+  const totalClicks      = typedAffiliates.reduce((s, a) => s + (a.total_clicks ?? 0), 0);
+
+  const recentUsers = [...typedProfiles].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 8);
 
   return (
     <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
@@ -46,7 +68,7 @@ export default async function AdminOverviewPage() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1rem", marginBottom: "2rem" }}>
         <StatCard label="Total Users"       value={totalUsers}      sub={`${activeUsers} active`}    icon={Users}      />
         <StatCard label="Affiliates"        value={totalAffiliates} sub={`${totalClicks} clicks`}    icon={UserCheck}  gold />
-        <StatCard label="Total Referrals"   value={affiliates?.reduce((s, a) => s + (a.total_referrals ?? 0), 0) ?? 0} icon={TrendingUp} />
+        <StatCard label="Total Referrals"   value={typedAffiliates.reduce((s, a) => s + (a.total_referrals ?? 0), 0)} icon={TrendingUp} />
         <StatCard label="Commission Paid Out" value={`$${totalEarned.toFixed(2)}`} icon={DollarSign} gold />
       </div>
 

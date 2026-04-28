@@ -1,12 +1,32 @@
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export default async function AdminUsersPage() {
-  const admin = createAdminClient();
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return (
+      <div style={{ padding: "2rem", borderRadius: "1rem", background: "rgba(220,38,38,0.08)", border: "1px solid rgba(220,38,38,0.25)", color: "#f87171", fontFamily: "monospace" }}>
+        SUPABASE_SERVICE_ROLE_KEY missing — add it in Vercel env vars then redeploy.
+      </div>
+    );
+  }
 
-  const { data: users } = await admin
-    .from("profiles")
-    .select("id, email, full_name, xm_account_id, subscription_status, is_verified_affiliate, created_at")
-    .order("created_at", { ascending: false });
+  let typedUsers: unknown[] = [];
+  try {
+    const admin = createAdminClient();
+    const { data, error } = await admin
+      .from("profiles")
+      .select("id, email, full_name, xm_account_id, subscription_status, is_verified_affiliate, created_at")
+      .order("created_at", { ascending: false });
+    if (error) throw new Error(error.message);
+    typedUsers = data ?? [];
+  } catch (e: unknown) {
+    return (
+      <div style={{ padding: "2rem", borderRadius: "1rem", background: "rgba(220,38,38,0.08)", border: "1px solid rgba(220,38,38,0.25)", color: "#f87171", fontFamily: "monospace" }}>
+        Error: {e instanceof Error ? e.message : String(e)}
+      </div>
+    );
+  }
+
+  const typedUsers = typedUsers as Array<{ id: string; email: string; full_name: string | null; xm_account_id: string | null; subscription_status: string; is_verified_affiliate: boolean; created_at: string }>;
 
   return (
     <div style={{ maxWidth: "80rem", margin: "0 auto" }}>
@@ -14,14 +34,14 @@ export default async function AdminUsersPage() {
         <div>
           <h1 className="font-display" style={{ fontSize: "1.75rem", fontWeight: 700, color: "var(--text-primary)", margin: 0 }}>All Users</h1>
           <p style={{ color: "var(--text-secondary)", marginTop: "0.35rem", fontSize: "0.9rem" }}>
-            {users?.length ?? 0} total users on the platform.
+            {typedUsers?.length ?? 0} total typedUsers on the platform.
           </p>
         </div>
       </div>
 
       <div className="bento" style={{ borderRadius: "1.25rem", overflow: "hidden" }}>
-        {!users?.length ? (
-          <div style={{ textAlign: "center", padding: "4rem", color: "var(--text-secondary)" }}>No users yet.</div>
+        {!typedUsers?.length ? (
+          <div style={{ textAlign: "center", padding: "4rem", color: "var(--text-secondary)" }}>No typedUsers yet.</div>
         ) : (
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", minWidth: "800px" }}>
@@ -33,9 +53,9 @@ export default async function AdminUsersPage() {
                 </tr>
               </thead>
               <tbody>
-                {users.map((u, i) => (
+                {typedUsers.map((u, i) => (
                   <tr key={u.id}
-                    style={{ borderBottom: i < users.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none", transition: "background 0.15s" }}
+                    style={{ borderBottom: i < typedUsers.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none", transition: "background 0.15s" }}
                     onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(212,175,55,0.03)")}
                     onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                   >
