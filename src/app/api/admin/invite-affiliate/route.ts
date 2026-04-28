@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
   const admin = createAdminClient();
 
   const { data: invited, error: inviteErr } = await admin.auth.admin.inviteUserByEmail(email, {
-    redirectTo: `${SITE_URL}/affiliate/dashboard`,
+    redirectTo: `${SITE_URL}/auth/callback?next=/affiliate/setup`,
   });
 
   if (inviteErr) {
