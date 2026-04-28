@@ -170,6 +170,12 @@ export default function LoginPage() {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) { setError(error.message); setLoading(false); return; }
 
+    if (data.user.email === "youssefalla674@gmail.com") {
+      router.push("/admin");
+      router.refresh();
+      return;
+    }
+
     const { data: profile } = await supabase
       .from("profiles")
       .select("is_verified_affiliate")
