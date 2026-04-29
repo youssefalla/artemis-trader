@@ -35,8 +35,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: inviteErr.message }, { status: 400 });
   }
 
-  // Set the shared affiliate password immediately — influencer can login without "set password" step
-  await admin.auth.admin.updateUserById(invited.user.id, { password });
+  // Set password + confirm email immediately — influencer can login without clicking any link
+  await admin.auth.admin.updateUserById(invited.user.id, {
+    password,
+    email_confirm: true,
+  });
 
   // Grant affiliate access
   const { error: grantErr } = await admin.rpc("grant_affiliate", {
