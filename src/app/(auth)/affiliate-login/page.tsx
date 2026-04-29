@@ -220,14 +220,14 @@ export default function AffiliateLoginPage() {
             type="submit" disabled={loading}
             style={{
               width: "100%",
-              background: "linear-gradient(135deg, #16a34a 0%, #22c55e 40%, #D4AF37 100%)",
+              background: "linear-gradient(135deg, #D4AF37 0%, #f0d060 50%, #D4AF37 100%)",
               border: "none", borderRadius: "0.875rem", padding: "0.9375rem",
-              fontSize: "1rem", fontWeight: 700, color: "#fff",
+              fontSize: "1rem", fontWeight: 700, color: "#0a0700",
               cursor: loading ? "not-allowed" : "pointer",
               display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem",
               opacity: loading ? 0.75 : 1, transition: "opacity 0.2s, transform 0.15s",
               letterSpacing: "0.04em",
-              boxShadow: "0 4px 24px rgba(34,197,94,0.35)",
+              boxShadow: "0 4px 24px rgba(212,175,55,0.40)",
             }}
             onMouseEnter={(e) => { if (!loading) e.currentTarget.style.transform = "translateY(-1px)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
