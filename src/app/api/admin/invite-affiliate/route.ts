@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 
   // Send Supabase invite email (uses the custom template from Supabase dashboard)
   const { data: invited, error: inviteErr } = await admin.auth.admin.inviteUserByEmail(email, {
-    redirectTo: `${SITE_URL}/affiliate/dashboard`,
+    redirectTo: `${SITE_URL}/affiliate-login`,
   });
 
   if (inviteErr) {
