@@ -9,21 +9,12 @@ import Testimonials from "@/components/landing/Testimonials";
 import CTABanner from "@/components/landing/CTABanner";
 import Footer from "@/components/landing/Footer";
 import ScrollReveal from "@/components/landing/ScrollReveal";
-import { EtheralShadow } from "@/components/ui/etheral-shadow";
+import HomeBackground from "@/components/landing/HomeBackground";
 
 export default function LandingPage() {
   return (
-    <div style={{ position: "relative", width: "100%", background: "#0a0800" }}>
-      {/* Etheral shadow — only background */}
-      <div style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }}>
-        <EtheralShadow
-          color="rgba(212,175,55,0.75)"
-          animation={{ scale: 80, speed: 70 }}
-          noise={{ opacity: 0, scale: 1 }}
-          sizing="fill"
-          style={{ width: "100%", height: "100%" }}
-        />
-      </div>
+    <div style={{ position: "relative", width: "100%" }}>
+      <HomeBackground />
 
       <div style={{ position: "relative", zIndex: 1 }}>
         <ScrollReveal />
