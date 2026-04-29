@@ -8,6 +8,7 @@ import {
   Settings,
   LogOut,
   ChevronRight,
+  Sparkles,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useTheme } from "@/lib/theme";
@@ -31,6 +32,7 @@ const MoonIcon = () => (
 
 const navItems = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+  { href: "/dashboard/ai-chat", icon: Sparkles, label: "Artemis AI" },
   { href: "/dashboard/history", icon: History, label: "Trade History" },
   { href: "/dashboard/settings", icon: Settings, label: "Settings" },
 ];
