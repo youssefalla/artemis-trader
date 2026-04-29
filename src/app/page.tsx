@@ -9,26 +9,24 @@ import Testimonials from "@/components/landing/Testimonials";
 import CTABanner from "@/components/landing/CTABanner";
 import Footer from "@/components/landing/Footer";
 import ScrollReveal from "@/components/landing/ScrollReveal";
-import HomeBackground from "@/components/landing/HomeBackground";
+import GlassFilter from "@/components/landing/GlassFilter";
+import { GoldGradientBg } from "@/components/ui/elegant-gold-pattern";
 
 export default function LandingPage() {
   return (
-    <div style={{ position: "relative", width: "100%" }}>
-      <HomeBackground />
-
-      <div style={{ position: "relative", zIndex: 1 }}>
-        <ScrollReveal />
-        <LandingNavbar />
-        <LandingHero />
-        <Stats />
-        <Features />
-        <AIFeatures />
-        <HowItWorks />
-        <Pricing />
-        <Testimonials />
-        <CTABanner />
-        <Footer />
-      </div>
-    </div>
+    <GoldGradientBg>
+      <GlassFilter />
+      <ScrollReveal />
+      <LandingNavbar />
+      <LandingHero />
+      <Stats />
+      <Features />
+      <AIFeatures />
+      <HowItWorks />
+      <Pricing />
+      <Testimonials />
+      <CTABanner />
+      <Footer />
+    </GoldGradientBg>
   );
 }
