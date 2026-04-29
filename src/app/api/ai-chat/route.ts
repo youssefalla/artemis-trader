@@ -21,13 +21,17 @@ export async function POST(request: NextRequest) {
   const { messages } = await request.json();
   if (!messages?.length) return NextResponse.json({ error: "No messages" }, { status: 400 });
 
-  const response = await client.messages.create({
-    model: "claude-sonnet-4-6",
-    max_tokens: 1024,
-    system: SYSTEM_PROMPT,
-    messages,
-  });
-
-  const text = response.content[0].type === "text" ? response.content[0].text : "";
-  return NextResponse.json({ reply: text });
+  try {
+    const response = await client.messages.create({
+      model: "claude-sonnet-4-6",
+      max_tokens: 1024,
+      system: SYSTEM_PROMPT,
+      messages,
+    });
+    const text = response.content[0].type === "text" ? response.content[0].text : "";
+    return NextResponse.json({ reply: text });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : "AI error";
+    return NextResponse.json({ error: msg }, { status: 500 });
+  }
 }
