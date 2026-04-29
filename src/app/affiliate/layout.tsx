@@ -21,9 +21,25 @@ export default async function AffiliateLayout({ children }: { children: React.Re
   return (
     <GoldGradientBg>
       <GlassFilter />
+      <style>{`
+        .aff-main {
+          flex: 1;
+          margin-left: 16rem;
+          padding: 2rem;
+          overflow-y: auto;
+          min-height: 100vh;
+        }
+        @media (max-width: 768px) {
+          .aff-main {
+            margin-left: 0 !important;
+            padding: 1.25rem 1rem;
+            padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+          }
+        }
+      `}</style>
       <div style={{ minHeight: "100vh", display: "flex" }}>
         <AffiliateSidebar />
-        <main style={{ flex: 1, marginLeft: "16rem", padding: "2rem", overflowY: "auto" }}>
+        <main className="aff-main">
           {children}
         </main>
       </div>
