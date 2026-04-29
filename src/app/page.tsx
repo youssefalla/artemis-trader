@@ -9,14 +9,12 @@ import Testimonials from "@/components/landing/Testimonials";
 import CTABanner from "@/components/landing/CTABanner";
 import Footer from "@/components/landing/Footer";
 import ScrollReveal from "@/components/landing/ScrollReveal";
-import GlassFilter from "@/components/landing/GlassFilter";
-import { GoldGradientBg } from "@/components/ui/elegant-gold-pattern";
 import { EtheralShadow } from "@/components/ui/etheral-shadow";
 
 export default function LandingPage() {
   return (
-    <GoldGradientBg>
-      {/* Etheral shadow background — fixed, behind everything */}
+    <div style={{ position: "relative", width: "100%", background: "#0a0800" }}>
+      {/* Etheral shadow — only background */}
       <div style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }}>
         <EtheralShadow
           color="rgba(212,175,55,0.75)"
@@ -28,7 +26,6 @@ export default function LandingPage() {
       </div>
 
       <div style={{ position: "relative", zIndex: 1 }}>
-        <GlassFilter />
         <ScrollReveal />
         <LandingNavbar />
         <LandingHero />
@@ -41,6 +38,6 @@ export default function LandingPage() {
         <CTABanner />
         <Footer />
       </div>
-    </GoldGradientBg>
+    </div>
   );
 }

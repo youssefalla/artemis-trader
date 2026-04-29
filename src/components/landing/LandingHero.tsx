@@ -65,7 +65,6 @@ function triggerBlurIn(el: HTMLElement) {
 
 export default function LandingHero() {
   const headlineRef = useRef<HTMLHeadingElement>(null);
-  const particlesRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
   const curveRef = useRef<SVGPathElement>(null);
   const fillRef = useRef<SVGPathElement>(null);
@@ -83,7 +82,6 @@ export default function LandingHero() {
 
   useEffect(() => {
     if (headlineRef.current) triggerBlurIn(headlineRef.current);
-    if (particlesRef.current) buildParticles(particlesRef.current);
   }, []);
 
   useEffect(() => {
@@ -223,19 +221,6 @@ export default function LandingHero() {
 
   return (
     <section style={{ position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "flex-start", paddingTop: "8rem", paddingBottom: "4rem", paddingLeft: "1.5rem", paddingRight: "1.5rem", overflow: "hidden" }}>
-      {/* Background */}
-      <div className="hero-bg">
-        <div className="hero-grid" />
-        <div className="mesh" />
-        <div className="particles" ref={particlesRef} />
-        <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0 }} viewBox="0 0 1200 800" preserveAspectRatio="none" className="dark:opacity-35">
-          <g stroke="#D4AF37" strokeWidth=".4" fill="none" opacity=".7">
-            <path d="M0,600 C200,520 400,640 700,540 S 1100,500 1200,560" />
-            <path d="M0,300 C300,240 500,360 800,260 S 1100,220 1200,280" />
-            <path d="M0,720 C150,700 350,760 600,700 S 1000,720 1200,690" />
-          </g>
-        </svg>
-      </div>
 
       <div style={{ position: "relative", maxWidth: "72rem", margin: "0 auto", width: "100%", display: "grid", gap: "3rem", alignItems: "center" }} className="lg:grid-cols-2">
         {/* Left: text */}
