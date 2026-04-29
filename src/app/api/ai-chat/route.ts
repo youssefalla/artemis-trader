@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import Anthropic from "@anthropic-ai/sdk";
+import type { MessageParam } from "@anthropic-ai/sdk/resources/messages";
 import { createClient } from "@/lib/supabase/server";
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 const SYSTEM_PROMPT = `You are Artemis AI, a professional trading assistant for the Artemis Trader platform. You specialize in:
 - Forex and Gold (XAUUSD) trading analysis
@@ -14,14 +15,20 @@ const SYSTEM_PROMPT = `You are Artemis AI, a professional trading assistant for 
 Be concise, professional, and helpful. Format responses clearly. When discussing prices or market data, mention that your knowledge has a cutoff and users should verify live data. Always emphasize risk management. Never give direct financial advice — provide analysis and education only.`;
 
 type RawPart = { type: string; text?: string; source?: { data: string; media_type: string } };
-type RawMessage = { role: string; content: string | RawPart[] };
+type RawMessage = { role: "user" | "assistant"; content: string | RawPart[] };
 
-function toGeminiParts(content: string | RawPart[]) {
-  if (typeof content === "string") return [{ text: content }];
-  return content.map((p) => {
-    if (p.type === "text")  return { text: p.text ?? "" };
-    if (p.type === "image") return { inlineData: { data: p.source!.data, mimeType: p.source!.media_type } };
-    return { text: "" };
+function toAnthropicMessages(messages: RawMessage[]): MessageParam[] {
+  return messages.map((m) => {
+    if (typeof m.content === "string") return { role: m.role, content: m.content };
+    const content = m.content.map((p) => {
+      if (p.type === "text")  return { type: "text" as const, text: p.text ?? "" };
+      if (p.type === "image") return {
+        type: "image" as const,
+        source: { type: "base64" as const, media_type: p.source!.media_type as "image/jpeg" | "image/png" | "image/gif" | "image/webp", data: p.source!.data },
+      };
+      return { type: "text" as const, text: "" };
+    });
+    return { role: m.role, content };
   });
 }
 
@@ -34,25 +41,18 @@ export async function POST(request: NextRequest) {
   if (!messages?.length) return NextResponse.json({ error: "No messages" }, { status: 400 });
 
   try {
-    const model = genAI.getGenerativeModel({
-      model: "gemini-1.5-flash",
-      systemInstruction: SYSTEM_PROMPT,
+    const response = await client.messages.create({
+      model: "claude-sonnet-4-6",
+      max_tokens: 1024,
+      system: SYSTEM_PROMPT,
+      messages: toAnthropicMessages(messages),
     });
 
-    const last    = messages[messages.length - 1];
-    const history = messages.slice(0, -1).map((m) => ({
-      role:  m.role === "assistant" ? "model" : "user",
-      parts: toGeminiParts(m.content),
-    }));
-
-    const chat   = model.startChat({ history });
-    const result = await chat.sendMessage(toGeminiParts(last.content));
-    const reply  = result.response.text();
-
-    return NextResponse.json({ reply });
+    const text = response.content[0].type === "text" ? response.content[0].text : "";
+    return NextResponse.json({ reply: text });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : "AI error";
-    console.error("Gemini error:", msg);
+    console.error("Claude error:", msg);
     return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
