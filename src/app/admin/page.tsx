@@ -59,52 +59,66 @@ export default function AdminOverviewPage() {
 
   return (
     <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
+      <style>{`
+        .admin-stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:2rem; }
+        .admin-table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+        .admin-hide-mobile { display:table-cell; }
+        @media (max-width:768px) {
+          .admin-stats-grid { grid-template-columns:repeat(2,1fr); }
+          .admin-hide-mobile { display:none; }
+        }
+      `}</style>
+
       <div style={{ marginBottom: "2rem" }}>
         <h1 className="font-display" style={{ fontSize: "1.75rem", fontWeight: 700, color: "var(--text-primary)", margin: 0 }}>Admin Overview</h1>
         <p style={{ color: "var(--text-secondary)", marginTop: "0.35rem", fontSize: "0.9rem" }}>Full platform visibility — everything in one place.</p>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1rem", marginBottom: "2rem" }}>
-        <StatCard label="Total Users"       value={totalUsers}      sub={`${activeUsers} active`}   icon={Users}      />
-        <StatCard label="Affiliates"        value={totalAffiliates} sub={`${affiliates.reduce((s,a)=>s+(a.total_clicks??0),0)} clicks`} icon={UserCheck} gold />
-        <StatCard label="Total Referrals"   value={totalReferrals}  icon={TrendingUp} />
-        <StatCard label="Commission Paid"   value={`$${totalEarned.toFixed(2)}`} icon={DollarSign} gold />
+      <div className="admin-stats-grid">
+        <StatCard label="Total Users"     value={totalUsers}      sub={`${activeUsers} active`}   icon={Users}      />
+        <StatCard label="Affiliates"      value={totalAffiliates} sub={`${affiliates.reduce((s,a)=>s+(a.total_clicks??0),0)} clicks`} icon={UserCheck} gold />
+        <StatCard label="Total Referrals" value={totalReferrals}  icon={TrendingUp} />
+        <StatCard label="Commission Paid" value={`$${totalEarned.toFixed(2)}`} icon={DollarSign} gold />
       </div>
 
       <div className="bento" style={{ borderRadius: "1.25rem", overflow: "hidden" }}>
         <p className="font-mono" style={{ fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-secondary)", padding: "1.25rem 1.5rem 0.875rem" }}>
           Recent Signups
         </p>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
-              {["Email", "Name", "Status", "Affiliate", "Joined"].map(h => (
-                <th key={h} style={{ padding: "0.75rem 1.25rem", textAlign: "left", fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-secondary)" }}>{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {recentUsers.map((u, i) => (
-              <tr key={u.id} style={{ borderBottom: i < recentUsers.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
-                <td style={{ padding: "0.8rem 1.25rem", fontSize: "0.85rem", color: "var(--text-primary)" }}>{u.email}</td>
-                <td style={{ padding: "0.8rem 1.25rem", fontSize: "0.85rem", color: "var(--text-secondary)" }}>{u.full_name ?? "—"}</td>
-                <td style={{ padding: "0.8rem 1.25rem" }}>
-                  <span style={{ fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", padding: "0.2rem 0.5rem", borderRadius: "9999px",
-                    background: u.subscription_status === "active" ? "rgba(5,150,105,0.12)" : "rgba(255,255,255,0.07)",
-                    color: u.subscription_status === "active" ? "#34d399" : "var(--text-secondary)" }}>
-                    {u.subscription_status}
-                  </span>
-                </td>
-                <td style={{ padding: "0.8rem 1.25rem" }}>
-                  {u.is_verified_affiliate
-                    ? <span style={{ fontSize: "0.7rem", fontWeight: 700, padding: "0.2rem 0.5rem", borderRadius: "9999px", background: "rgba(212,175,55,0.12)", color: "#D4AF37" }}>✦ Affiliate</span>
-                    : <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>—</span>}
-                </td>
-                <td style={{ padding: "0.8rem 1.25rem", fontSize: "0.8rem", color: "var(--text-secondary)" }}>{new Date(u.created_at).toLocaleDateString()}</td>
+        <div className="admin-table-wrap">
+          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+            <thead>
+              <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+                <th style={{ padding: "0.75rem 1.25rem", textAlign: "left", fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-secondary)" }}>Email</th>
+                <th className="admin-hide-mobile" style={{ padding: "0.75rem 1.25rem", textAlign: "left", fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-secondary)" }}>Name</th>
+                <th style={{ padding: "0.75rem 1.25rem", textAlign: "left", fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-secondary)" }}>Status</th>
+                <th className="admin-hide-mobile" style={{ padding: "0.75rem 1.25rem", textAlign: "left", fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-secondary)" }}>Affiliate</th>
+                <th className="admin-hide-mobile" style={{ padding: "0.75rem 1.25rem", textAlign: "left", fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-secondary)" }}>Joined</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {recentUsers.map((u, i) => (
+                <tr key={u.id} style={{ borderBottom: i < recentUsers.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
+                  <td style={{ padding: "0.8rem 1.25rem", fontSize: "0.85rem", color: "var(--text-primary)", maxWidth: "12rem", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{u.email}</td>
+                  <td className="admin-hide-mobile" style={{ padding: "0.8rem 1.25rem", fontSize: "0.85rem", color: "var(--text-secondary)" }}>{u.full_name ?? "—"}</td>
+                  <td style={{ padding: "0.8rem 1.25rem" }}>
+                    <span style={{ fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", padding: "0.2rem 0.5rem", borderRadius: "9999px",
+                      background: u.subscription_status === "active" ? "rgba(5,150,105,0.12)" : "rgba(255,255,255,0.07)",
+                      color: u.subscription_status === "active" ? "#34d399" : "var(--text-secondary)" }}>
+                      {u.subscription_status}
+                    </span>
+                  </td>
+                  <td className="admin-hide-mobile" style={{ padding: "0.8rem 1.25rem" }}>
+                    {u.is_verified_affiliate
+                      ? <span style={{ fontSize: "0.7rem", fontWeight: 700, padding: "0.2rem 0.5rem", borderRadius: "9999px", background: "rgba(212,175,55,0.12)", color: "#D4AF37" }}>✦ Affiliate</span>
+                      : <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)" }}>—</span>}
+                  </td>
+                  <td className="admin-hide-mobile" style={{ padding: "0.8rem 1.25rem", fontSize: "0.8rem", color: "var(--text-secondary)" }}>{new Date(u.created_at).toLocaleDateString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
