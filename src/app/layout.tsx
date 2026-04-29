@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import { cookies } from "next/headers";
 import { ThemeProvider } from "@/lib/theme";
 import LoadingScreen from "@/components/ui/LoadingScreen";
+import ThemeTransition from "@/components/ui/ThemeTransition";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -56,6 +57,7 @@ export default async function RootLayout({
       <body className={`${jakarta.variable} ${mono.variable} antialiased`}>
         <ThemeProvider>
           <LoadingScreen />
+          <ThemeTransition />
           {children}
         </ThemeProvider>
       </body>
