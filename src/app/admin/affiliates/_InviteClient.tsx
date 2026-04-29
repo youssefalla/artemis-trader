@@ -21,7 +21,7 @@ export default function InviteClient() {
     const data = await res.json();
     setLoading(false);
     if (data.success) {
-      setResult({ ok: true, msg: `✓ Invite sent to ${email} — code: ${code.toUpperCase()}` });
+      setResult({ ok: true, msg: `✓ Affiliate created — login credentials sent to ${email} (code: ${code.toUpperCase()})` });
       setEmail(""); setCode(""); setCommission("20");
     } else {
       setResult({ ok: false, msg: data.error ?? data.warning ?? "Something went wrong" });
