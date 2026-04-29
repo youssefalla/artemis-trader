@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { createClient } from "@/lib/supabase/server";
 
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 const SYSTEM_PROMPT = `You are Artemis AI, a professional trading assistant for the Artemis Trader platform. You specialize in:
 - Forex and Gold (XAUUSD) trading analysis
@@ -22,14 +22,49 @@ export async function POST(request: NextRequest) {
   if (!messages?.length) return NextResponse.json({ error: "No messages" }, { status: 400 });
 
   try {
-    const response = await client.messages.create({
-      model: "claude-sonnet-4-6",
-      max_tokens: 1024,
-      system: SYSTEM_PROMPT,
-      messages,
+    const model = genAI.getGenerativeModel({
+      model: "gemini-1.5-flash",
+      systemInstruction: SYSTEM_PROMPT,
     });
-    const text = response.content[0].type === "text" ? response.content[0].text : "";
-    return NextResponse.json({ reply: text });
+
+    // Build Gemini chat history (all except last message)
+    const history = messages.slice(0, -1).map((m: { role: string; content: unknown }) => {
+      const isUser = m.role === "user";
+      // Handle multimodal (image) messages
+      if (Array.isArray(m.content)) {
+        const parts = m.content.map((part: { type: string; text?: string; source?: { data: string; media_type: string } }) => {
+          if (part.type === "text") return { text: part.text };
+          if (part.type === "image") return {
+            inlineData: { data: part.source!.data, mimeType: part.source!.media_type },
+          };
+          return { text: "" };
+        });
+        return { role: isUser ? "user" : "model", parts };
+      }
+      return { role: isUser ? "user" : "model", parts: [{ text: m.content as string }] };
+    });
+
+    const chat = model.startChat({ history });
+
+    // Last message (current user input)
+    const last = messages[messages.length - 1];
+    let result;
+
+    if (Array.isArray(last.content)) {
+      const parts = last.content.map((part: { type: string; text?: string; source?: { data: string; media_type: string } }) => {
+        if (part.type === "text") return { text: part.text };
+        if (part.type === "image") return {
+          inlineData: { data: part.source!.data, mimeType: part.source!.media_type },
+        };
+        return { text: "" };
+      });
+      result = await chat.sendMessage(parts);
+    } else {
+      result = await chat.sendMessage(last.content);
+    }
+
+    const reply = result.response.text();
+    return NextResponse.json({ reply });
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : "AI error";
     return NextResponse.json({ error: msg }, { status: 500 });
