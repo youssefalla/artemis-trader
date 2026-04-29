@@ -17,9 +17,25 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <GoldGradientBg>
       <GlassFilter />
+      <style>{`
+        .admin-main {
+          flex: 1;
+          margin-left: 16rem;
+          padding: 2rem;
+          overflow-y: auto;
+          min-height: 100vh;
+        }
+        @media (max-width: 768px) {
+          .admin-main {
+            margin-left: 0 !important;
+            padding: 1.25rem 1rem;
+            padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+          }
+        }
+      `}</style>
       <div style={{ minHeight: "100vh", display: "flex" }}>
         <AdminSidebar />
-        <main style={{ flex: 1, marginLeft: "16rem", padding: "2rem", overflowY: "auto" }}>
+        <main className="admin-main">
           {children}
         </main>
       </div>
