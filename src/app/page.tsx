@@ -21,7 +21,7 @@ export default function LandingPage() {
         <EtheralShadow
           color="rgba(212,175,55,0.75)"
           animation={{ scale: 80, speed: 70 }}
-          noise={{ opacity: 0.6, scale: 1.2 }}
+          noise={{ opacity: 0, scale: 1 }}
           sizing="fill"
           style={{ width: "100%", height: "100%" }}
         />
