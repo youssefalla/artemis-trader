@@ -56,11 +56,11 @@ export default async function DashboardPage() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-start justify-between gap-3 flex-wrap">
         <div>
-          <h1 className="font-display" style={{ fontSize: "2rem", letterSpacing: "-0.03em", color: "var(--text-primary)" }}>
+          <h1 className="font-display" style={{ fontSize: "clamp(1.5rem, 5vw, 2rem)", letterSpacing: "-0.03em", color: "var(--text-primary)" }}>
             {greeting()}, {profile?.full_name?.split(" ")[0] ?? "Trader"}
           </h1>
           <p className="text-sm text-[var(--text-secondary)] mt-0.5">

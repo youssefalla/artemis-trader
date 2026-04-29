@@ -10,20 +10,31 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    redirect("/login");
-  }
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) redirect("/login");
 
   return (
     <GoldGradientBg>
       <GlassFilter />
+      <style>{`
+        .dash-main {
+          flex: 1;
+          margin-left: 16rem;
+          padding: 2rem;
+          overflow-y: auto;
+          min-height: 100vh;
+        }
+        @media (max-width: 768px) {
+          .dash-main {
+            margin-left: 0 !important;
+            padding: 1.25rem 1rem;
+            padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+          }
+        }
+      `}</style>
       <div style={{ minHeight: "100vh", display: "flex" }}>
         <Sidebar />
-        <main style={{ flex: 1, marginLeft: "16rem", padding: "2rem", overflowY: "auto" }}>
+        <main className="dash-main">
           {children}
         </main>
       </div>
