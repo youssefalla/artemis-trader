@@ -163,9 +163,13 @@ export default function AIChatPage() {
         body: JSON.stringify({ messages: apiMessages }),
       });
       const data = await res.json();
-      if (data.reply) setMessages(p => [...p, { role: "assistant", content: data.reply }]);
-    } catch {
-      setMessages(p => [...p, { role: "assistant", content: "Something went wrong. Please try again." }]);
+      if (data.reply) {
+        setMessages(p => [...p, { role: "assistant", content: data.reply }]);
+      } else {
+        setMessages(p => [...p, { role: "assistant", content: `Error: ${data.error ?? "No response from AI"}` }]);
+      }
+    } catch (err) {
+      setMessages(p => [...p, { role: "assistant", content: `Error: ${err instanceof Error ? err.message : "Something went wrong"}` }]);
     } finally {
       setLoading(false);
     }
