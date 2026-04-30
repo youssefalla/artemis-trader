@@ -52,6 +52,154 @@ function TypeWriter({ text, speed = 38 }: { text: string; speed?: number }) {
   );
 }
 
+const BARS1 = [0.4,0.6,0.3,0.8,0.5,0.7,0.4,0.9,0.5,0.7,0.6,0.8,0.5,0.9];
+const BARS2 = [0.5,0.4,0.7,0.5,0.8,0.6,0.9,0.5,0.7,0.8,0.5,0.9,0.6,1.0];
+
+function MockDashboard({ dark }: { dark: boolean }) {
+  const [time, setTime] = useState("");
+  useEffect(() => {
+    const fmt = () => new Date().toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit", timeZone: "America/New_York" }) + " EST";
+    setTime(fmt());
+    const t = setInterval(() => setTime(fmt()), 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  const card = {
+    bg: dark ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.85)",
+    border: dark ? "1px solid rgba(255,255,255,0.08)" : "1px solid rgba(0,0,0,0.08)",
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 22, scale: 0.97 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      exit={{ opacity: 0, y: -12, scale: 0.98 }}
+      transition={{ duration: 0.55, ease: [0.22, 0.61, 0.36, 1] }}
+      style={{
+        width: "100%", borderRadius: "1.375rem", overflow: "hidden", marginBottom: "1.25rem",
+        background: dark ? "rgba(14,14,18,0.72)" : "rgba(255,255,255,0.72)",
+        backdropFilter: "blur(24px) saturate(160%)", WebkitBackdropFilter: "blur(24px) saturate(160%)",
+        border: dark ? "1px solid rgba(255,255,255,0.07)" : "1px solid rgba(255,255,255,0.85)",
+        boxShadow: dark
+          ? "0 24px 64px rgba(0,0,0,0.55), inset 1px 1px 1px rgba(255,255,255,0.05)"
+          : "0 24px 64px rgba(0,0,0,0.08), inset 2px 2px 1px rgba(255,255,255,0.9), inset -1px -1px 1px rgba(255,255,255,0.5)",
+      }}
+    >
+      {/* ── Header ── */}
+      <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"0.7rem 1.1rem", borderBottom: dark ? "1px solid rgba(255,255,255,0.06)" : "1px solid rgba(0,0,0,0.05)" }}>
+        <div style={{ display:"flex", gap:5 }}>
+          {["#FF5F57","#FFBD2E","#28C840"].map(c => <div key={c} style={{ width:9, height:9, borderRadius:"50%", background:c }} />)}
+        </div>
+        <div style={{ display:"flex", alignItems:"center", gap:"0.375rem" }}>
+          <motion.div
+            animate={{ scale:[1,1.3,1], opacity:[0.7,1,0.7] }}
+            transition={{ duration:1.8, repeat:Infinity, ease:"easeInOut" }}
+            style={{ width:7, height:7, borderRadius:"50%", background:"#22C55E", boxShadow:"0 0 6px #22C55E" }}
+          />
+          <span className="font-mono" style={{ fontSize:"0.67rem", color:"var(--text-secondary)", letterSpacing:"0.05em" }}>artemis · live</span>
+        </div>
+        <span className="font-mono" style={{ fontSize:"0.67rem", color:"var(--text-secondary)", opacity:0.65 }}>{time}</span>
+      </div>
+
+      {/* ── Stats row ── */}
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:"0.625rem", padding:"0.7rem 1.1rem" }}>
+        {([
+          { label:"Today P/L",    main:"+$1,305", suffix:".40", sub:"▲ 2.55%", subClr:"#22C55E", delay:0.18 },
+          { label:"Open Trades",  main:"7",        sub:"3 long · 4 short",      delay:0.28 },
+          { label:"Win Rate · 30D", main:"68%",   sub:"142/209", gold:true,     delay:0.38 },
+        ] as const).map(s => (
+          <motion.div key={s.label}
+            initial={{ opacity:0, y:10 }} animate={{ opacity:1, y:0 }}
+            transition={{ delay:s.delay, duration:0.4, ease:[0.22,0.61,0.36,1] }}
+            style={{ padding:"0.625rem", borderRadius:"0.75rem", background:card.bg, border:s.gold?"1px solid rgba(212,175,55,0.25)":card.border }}
+          >
+            <p className="font-mono" style={{ fontSize:"0.57rem", textTransform:"uppercase", letterSpacing:"0.1em", color:"var(--text-secondary)", margin:"0 0 0.35rem" }}>{s.label}</p>
+            <p style={{ fontSize:s.label==="Today P/L"?"1.05rem":"1.35rem", fontWeight:700, color:s.gold?"#D4AF37":"var(--text-primary)", margin:0, lineHeight:1 }}>
+              {s.main}{s.suffix&&<span style={{ color:"#D4AF37", fontSize:"0.68rem" }}>{s.suffix}</span>}
+            </p>
+            <p style={{ fontSize:"0.62rem", color:s.subClr||"var(--text-secondary)", margin:"0.22rem 0 0" }}>{s.sub}</p>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* ── Equity Curve ── */}
+      <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:0.42 }}
+        style={{ padding:"0 1.1rem 0.7rem" }}>
+        <div style={{ padding:"0.7rem", borderRadius:"0.75rem", background:card.bg, border:card.border }}>
+          <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"0.45rem" }}>
+            <p style={{ fontSize:"0.73rem", fontWeight:600, color:"var(--text-primary)", margin:0 }}>
+              Equity Curve <span style={{ fontSize:"0.6rem", fontWeight:400, color:"var(--text-secondary)" }}>30D</span>
+            </p>
+            <div style={{ display:"flex", gap:3 }}>
+              {["1D","30D","YTD"].map(tf => (
+                <span key={tf} style={{ fontSize:"0.58rem", padding:"0.15rem 0.4rem", borderRadius:"0.3rem", border:tf==="30D"?"1px solid rgba(212,175,55,0.5)":"none", color:tf==="30D"?"#D4AF37":"var(--text-secondary)", fontWeight:tf==="30D"?700:400 }}>{tf}</span>
+              ))}
+            </div>
+          </div>
+          <svg viewBox="0 0 620 175" style={{ width:"100%", height:88, display:"block", overflow:"visible" }}>
+            <defs>
+              <linearGradient id="eq-g" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#D4AF37" stopOpacity="0.28" />
+                <stop offset="100%" stopColor="#D4AF37" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            {[35,75,115,155].map(y => (
+              <line key={y} x1="0" y1={y} x2="620" y2={y} stroke={dark?"rgba(255,255,255,0.05)":"rgba(0,0,0,0.05)"} strokeWidth="1" />
+            ))}
+            <motion.path
+              d="M 10 168 C 60 155,110 144,160 132 C 210 120,260 110,310 96 C 360 82,410 68,460 54 C 510 40,555 26,608 12 L 608 170 L 10 170 Z"
+              fill="url(#eq-g)"
+              initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:0.85, duration:0.55 }}
+            />
+            <motion.path
+              d="M 10 168 C 60 155,110 144,160 132 C 210 120,260 110,310 96 C 360 82,410 68,460 54 C 510 40,555 26,608 12"
+              fill="none" stroke="#D4AF37" strokeWidth="2.2" strokeLinecap="round"
+              initial={{ pathLength:0, opacity:0 }} animate={{ pathLength:1, opacity:1 }}
+              transition={{ delay:0.58, duration:1.5, ease:[0.22,0.61,0.36,1] }}
+            />
+            <motion.circle cx="608" cy="12" r="4.5" fill="#D4AF37"
+              initial={{ scale:0, opacity:0 }} animate={{ scale:1, opacity:1 }}
+              transition={{ delay:2.0, duration:0.35, type:"spring", stiffness:300 }}
+            />
+            <motion.circle cx="608" cy="12" r="9" fill="none" stroke="#D4AF37" strokeWidth="1"
+              initial={{ scale:0, opacity:0 }} animate={{ scale:[1,1.8,1], opacity:[0.6,0,0.6] }}
+              transition={{ delay:2.15, duration:1.8, repeat:Infinity }}
+            />
+          </svg>
+        </div>
+      </motion.div>
+
+      {/* ── Market pairs ── */}
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"0.625rem", padding:"0 1.1rem 0.85rem" }}>
+        {[
+          { pair:"EUR/USD", change:"+0.22%", bars:BARS1, delay:0.62 },
+          { pair:"XAU/USD", change:"+1.04%", bars:BARS2, delay:0.72 },
+        ].map((m, mi) => (
+          <motion.div key={m.pair}
+            initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }}
+            transition={{ delay:m.delay, duration:0.4, ease:[0.22,0.61,0.36,1] }}
+            style={{ padding:"0.625rem", borderRadius:"0.75rem", background:card.bg, border:card.border }}
+          >
+            <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"0.45rem" }}>
+              <span style={{ fontSize:"0.75rem", fontWeight:700, color:"var(--text-primary)" }}>{m.pair}</span>
+              <span style={{ fontSize:"0.7rem", fontWeight:600, color:"#22C55E" }}>{m.change}</span>
+            </div>
+            <div style={{ display:"flex", alignItems:"flex-end", gap:2.5, height:32 }}>
+              {m.bars.map((h, i) => (
+                <motion.div key={i}
+                  initial={{ scaleY:0 }} animate={{ scaleY:1 }}
+                  transition={{ delay:m.delay+0.05+i*0.035, duration:0.35, ease:[0.22,0.61,0.36,1] }}
+                  style={{ flex:1, background:"#D4AF37", borderRadius:2, height:`${h*100}%`, opacity:0.55+h*0.45, originY:1 }}
+                />
+              ))}
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
 const QUICK_PROMPTS = [
   { icon: <TrendingUp size={13} />, label: "Gold market today",  text: "What's happening with Gold (XAUUSD) in the market today?" },
   { icon: <Newspaper size={13} />,  label: "Forex news",         text: "What are the latest important Forex market news and events?" },
@@ -233,8 +381,8 @@ export default function AIChatPage() {
       minHeight: "calc(100vh - 4rem)",
       display: "flex", flexDirection: "column",
       alignItems: "center",
-      justifyContent: hasMessages ? "flex-start" : "center",
-      padding: hasMessages ? "1.5rem 0 0" : "0",
+      justifyContent: "flex-start",
+      paddingTop: hasMessages ? "1.5rem" : "2rem",
       overflow: "hidden",
     }}>
 
@@ -251,21 +399,24 @@ export default function AIChatPage() {
         )}
       </AnimatePresence>
 
-      {/* Heading */}
+      {/* ── Empty state: heading + mock dashboard ── */}
       <AnimatePresence>
         {!hasMessages && (
           <motion.div
-            key="heading"
+            key="empty-state"
             initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.4 }}
-            style={{ textAlign: "center", marginBottom: "2.5rem", zIndex: 1, width: "100%", maxWidth: 640 }}
+            style={{ zIndex: 1, width: "100%", maxWidth: 640, marginBottom: "1.25rem" }}
           >
-            <h1 className="font-display" style={{ fontSize: "2rem", fontWeight: 700, color: "var(--text-primary)", margin: "0 0 0.5rem", letterSpacing: "-0.03em" }}>
-              <TypeWriter text="How can I help today?" speed={42} />
-            </h1>
-            <p style={{ fontSize: "0.875rem", color: "var(--text-secondary)", margin: 0 }}>
-              Type a question or upload a chart for analysis
-            </p>
+            <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
+              <h1 className="font-display" style={{ fontSize: "2rem", fontWeight: 700, color: "var(--text-primary)", margin: "0 0 0.4rem", letterSpacing: "-0.03em" }}>
+                <TypeWriter text="How can I help today?" speed={42} />
+              </h1>
+              <p style={{ fontSize: "0.875rem", color: "var(--text-secondary)", margin: 0 }}>
+                Type a question or upload a chart for analysis
+              </p>
+            </div>
+            <MockDashboard dark={dark} />
           </motion.div>
         )}
       </AnimatePresence>
