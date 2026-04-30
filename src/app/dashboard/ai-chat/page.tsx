@@ -104,10 +104,10 @@ function MockDashboard({ dark }: { dark: boolean }) {
       {/* ── Stats row ── */}
       <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:"0.625rem", padding:"0.7rem 1.1rem" }}>
         {([
-          { label:"Today P/L",    main:"+$1,305", suffix:".40", sub:"▲ 2.55%", subClr:"#22C55E", delay:0.18 },
-          { label:"Open Trades",  main:"7",        sub:"3 long · 4 short",      delay:0.28 },
-          { label:"Win Rate · 30D", main:"68%",   sub:"142/209", gold:true,     delay:0.38 },
-        ] as const).map(s => (
+          { label:"Today P/L",      main:"+$1,305", suffix:".40", sub:"▲ 2.55%", subClr:"#22C55E", gold:false, delay:0.18 },
+          { label:"Open Trades",    main:"7",        suffix:"",   sub:"3 long · 4 short", subClr:"", gold:false, delay:0.28 },
+          { label:"Win Rate · 30D", main:"68%",      suffix:"",   sub:"142/209", subClr:"", gold:true,  delay:0.38 },
+        ]).map(s => (
           <motion.div key={s.label}
             initial={{ opacity:0, y:10 }} animate={{ opacity:1, y:0 }}
             transition={{ delay:s.delay, duration:0.4, ease:[0.22,0.61,0.36,1] }}
