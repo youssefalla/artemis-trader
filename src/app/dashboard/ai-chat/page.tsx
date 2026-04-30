@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from "react";
 import { SendIcon, LoaderIcon, Sparkles, TrendingUp, Newspaper, ShieldCheck, BarChart2, Paperclip, X } from "lucide-react";
-import VaporTextIn from "@/components/ui/VaporTextIn";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/lib/theme";
 
