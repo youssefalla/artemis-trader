@@ -66,6 +66,7 @@ export default function Pricing() {
 
   const plans = [
     {
+      id: "trial",
       tier: T.pricing.trialTier,
       price: "$0",
       sub: T.pricing.trialSub,
@@ -77,6 +78,7 @@ export default function Pricing() {
       ctaClass: "btn-outline",
     },
     {
+      id: "trader",
       tier: T.pricing.traderTier,
       price: "$25",
       priceSuffix: "/mo",
@@ -89,6 +91,7 @@ export default function Pricing() {
       ctaClass: "btn-gold",
     },
     {
+      id: "elite",
       tier: T.pricing.eliteTier,
       price: "$210",
       priceSuffix: "/yr",
@@ -124,8 +127,8 @@ export default function Pricing() {
         </div>
 
         <div style={{ marginTop: "4rem", display: "grid", gap: "1.5rem", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", alignItems: "stretch" }} className="stagger">
-          {plans.map(({ tier, price, priceSuffix, sub, features, cta, href, featured, badge, ctaClass }) => (
-            <div key={tier} className={`price-card${featured ? " featured" : ""} reveal${featured ? "-scale" : ""}`} style={{ borderRadius: "1rem", padding: "1.75rem", display: "flex", flexDirection: "column", position: "relative" }}>
+          {plans.map(({ id, tier, price, priceSuffix, sub, features, cta, href, featured, badge, ctaClass }) => (
+            <div key={id} className={`price-card${featured ? " featured" : ""} reveal${featured ? "-scale" : ""}`} style={{ borderRadius: "1rem", padding: "1.75rem", display: "flex", flexDirection: "column", position: "relative" }}>
               {featured && badge && (
                 <div className="btn-gold font-mono" style={{ position: "absolute", top: "-0.75rem", left: "50%", transform: "translateX(-50%)", fontSize: "0.6875rem", letterSpacing: "0.18em", textTransform: "uppercase", borderRadius: "9999px", padding: "0.25rem 0.75rem", whiteSpace: "nowrap" }}>
                   {badge}
