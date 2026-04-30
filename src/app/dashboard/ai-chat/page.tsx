@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { SendIcon, LoaderIcon, Sparkles, TrendingUp, Newspaper, ShieldCheck, BarChart2, Paperclip, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/lib/theme";
+import VaporTextIn from "@/components/ui/VaporTextIn";
 
 interface ImageAttachment {
   base64: string;
@@ -225,14 +226,15 @@ export default function AIChatPage() {
             transition={{ duration: 0.4 }}
             style={{ textAlign: "center", marginBottom: "2.5rem", zIndex: 1, width: "100%", maxWidth: 640 }}
           >
-            <h1 style={{
-              fontSize: "2rem", fontWeight: 700,
-              background: dark ? "linear-gradient(135deg,rgba(255,255,255,0.92),rgba(255,255,255,0.42))" : "linear-gradient(135deg,#1a1000,#6b4f00)",
-              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-              margin: "0 0 0.5rem", letterSpacing: "-0.03em",
-            }}>
-              How can I help today?
-            </h1>
+            <VaporTextIn
+              text="How can I help today?"
+              fontSize={32}
+              fontFamily="Plus Jakarta Sans, sans-serif"
+              fontWeight={700}
+              color={dark ? "rgba(255,255,255,0.88)" : "rgba(26,16,0,0.88)"}
+              duration={1000}
+              style={{ margin: "0 0 0.5rem" }}
+            />
             <p style={{ fontSize: "0.875rem", color: "var(--text-secondary)", margin: 0 }}>
               Type a question or upload a chart for analysis
             </p>
