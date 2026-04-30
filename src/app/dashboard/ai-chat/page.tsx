@@ -186,8 +186,8 @@ export default function AIChatPage() {
     el.style.height = Math.min(el.scrollHeight, 140) + "px";
   }
 
-  const boxBg     = dark ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.72)";
-  const boxBorder = dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.10)";
+  const boxBg     = dark ? "rgba(16,16,21,0.45)"    : "rgba(255,255,255,0.55)";
+  const boxBorder = dark ? "rgba(255,255,255,0.07)" : "rgba(255,255,255,0.75)";
   const divider   = dark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.07)";
 
   const canSend = (input.trim() || !!image) && !loading;
@@ -263,8 +263,10 @@ export default function AIChatPage() {
         <div style={{
           background: boxBg, border: `1px solid ${boxBorder}`,
           borderRadius: "1.25rem",
-          backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)",
-          boxShadow: dark ? "0 8px 48px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)" : "0 8px 40px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)",
+          backdropFilter: "blur(20px) saturate(160%)", WebkitBackdropFilter: "blur(20px) saturate(160%)",
+          boxShadow: dark
+            ? "0 8px 32px rgba(0,0,0,0.45), inset 1px 1px 1px rgba(255,255,255,0.06), inset -1px -1px 1px rgba(212,175,55,0.05)"
+            : "0 8px 32px rgba(0,0,0,0.07), inset 2px 2px 1px rgba(255,255,255,0.85), inset -1px -1px 1px rgba(255,255,255,0.50)",
           overflow: "hidden",
         }}>
 
