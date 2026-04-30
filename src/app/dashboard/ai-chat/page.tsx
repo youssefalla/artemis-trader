@@ -17,6 +17,41 @@ interface Message {
   image?: { preview: string };
 }
 
+function TypeWriter({ text, speed = 38 }: { text: string; speed?: number }) {
+  const [displayed, setDisplayed] = useState("");
+  const [done, setDone]           = useState(false);
+
+  useEffect(() => {
+    setDisplayed("");
+    setDone(false);
+    let i = 0;
+    const tick = setInterval(() => {
+      i++;
+      setDisplayed(text.slice(0, i));
+      if (i >= text.length) { clearInterval(tick); setDone(true); }
+    }, speed);
+    return () => clearInterval(tick);
+  }, [text, speed]);
+
+  return (
+    <>
+      <style>{`
+        @keyframes tw-blink { 0%,100%{opacity:1} 50%{opacity:0} }
+        .tw-cursor {
+          display: inline-block; width: 3px; height: 0.85em;
+          background: #D4AF37; border-radius: 1px;
+          margin-left: 2px; vertical-align: middle;
+          animation: tw-blink 0.9s step-start infinite;
+          opacity: ${done ? 0 : 1};
+          transition: opacity 0.4s ease 0.6s;
+        }
+      `}</style>
+      <span>{displayed}</span>
+      <span className="tw-cursor" />
+    </>
+  );
+}
+
 const QUICK_PROMPTS = [
   { icon: <TrendingUp size={13} />, label: "Gold market today",  text: "What's happening with Gold (XAUUSD) in the market today?" },
   { icon: <Newspaper size={13} />,  label: "Forex news",         text: "What are the latest important Forex market news and events?" },
@@ -226,7 +261,7 @@ export default function AIChatPage() {
             style={{ textAlign: "center", marginBottom: "2.5rem", zIndex: 1, width: "100%", maxWidth: 640 }}
           >
             <h1 className="font-display" style={{ fontSize: "2rem", fontWeight: 700, color: "var(--text-primary)", margin: "0 0 0.5rem", letterSpacing: "-0.03em" }}>
-              How can I help today?
+              <TypeWriter text="How can I help today?" speed={42} />
             </h1>
             <p style={{ fontSize: "0.875rem", color: "var(--text-secondary)", margin: 0 }}>
               Type a question or upload a chart for analysis
