@@ -125,7 +125,7 @@ export default function Sidebar() {
         {/* Bottom */}
         <div style={{ padding: "0.75rem", borderTop: dark ? "1px solid rgba(212,175,55,0.12)" : "1px solid rgba(0,0,0,0.06)", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
           <div style={{ padding: "0.25rem 0.375rem" }}>
-            <LanguageSwitcher />
+            <LanguageSwitcher dropUp />
           </div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.25rem 0.375rem" }}>
             <span className="font-mono" style={{ fontSize: "0.6875rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-secondary)" }}>{T.sidebar.theme}</span>

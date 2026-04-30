@@ -5,7 +5,7 @@ import { useT } from "@/lib/i18n";
 import { LANGUAGES, Lang } from "@/lib/translations";
 import { useTheme } from "@/lib/theme";
 
-export default function LanguageSwitcher({ compact = false }: { compact?: boolean }) {
+export default function LanguageSwitcher({ compact = false, dropUp = false }: { compact?: boolean; dropUp?: boolean }) {
   const { lang, setLang } = useT();
   const { theme } = useTheme();
   const dark = theme === "dark";
@@ -51,7 +51,7 @@ export default function LanguageSwitcher({ compact = false }: { compact?: boolea
       {open && (
         <div style={{
           position: "absolute",
-          top: "calc(100% + 0.5rem)",
+          ...(dropUp ? { bottom: "calc(100% + 0.5rem)" } : { top: "calc(100% + 0.5rem)" }),
           right: 0,
           minWidth: "9rem",
           background: dark ? "rgba(16,16,21,0.95)" : "rgba(255,255,255,0.97)",
