@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { SendIcon, LoaderIcon, Sparkles, TrendingUp, Newspaper, ShieldCheck, BarChart2, Paperclip, X } from "lucide-react";
+import { SendIcon, LoaderIcon, Sparkles, TrendingUp, Newspaper, ShieldCheck, BarChart2, Paperclip, X, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/lib/theme";
 
@@ -121,11 +121,21 @@ function MessageBubble({ msg, dark }: { msg: Message; dark: boolean }) {
   );
 }
 
+const STORAGE_KEY = "artemis_ai_chat_messages";
+
 export default function AIChatPage() {
   const { theme } = useTheme();
   const dark = theme === "dark";
 
-  const [messages, setMessages]   = useState<Message[]>([]);
+  const [messages, setMessages]   = useState<Message[]>(() => {
+    if (typeof window === "undefined") return [];
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
   const [input, setInput]         = useState("");
   const [loading, setLoading]     = useState(false);
   const [image, setImage]         = useState<ImageAttachment | null>(null);
@@ -133,6 +143,10 @@ export default function AIChatPage() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const hasMessages = messages.length > 0;
+
+  useEffect(() => {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(messages)); } catch {}
+  }, [messages]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -210,6 +224,11 @@ export default function AIChatPage() {
     }
   }
 
+  function clearMessages() {
+    setMessages([]);
+    try { localStorage.removeItem(STORAGE_KEY); } catch {}
+  }
+
   function onKey(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
   }
@@ -273,6 +292,17 @@ export default function AIChatPage() {
       {/* Messages */}
       {hasMessages && (
         <div style={{ width: "100%", maxWidth: 700, flex: 1, overflowY: "auto", padding: "0 0 1.5rem", maskImage: "linear-gradient(to bottom,transparent 0,black 40px)" }}>
+          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "0.75rem" }}>
+            <button
+              onClick={clearMessages}
+              style={{ display: "flex", alignItems: "center", gap: "0.35rem", padding: "0.35rem 0.75rem", borderRadius: "0.625rem", background: "transparent", border: dark ? "1px solid rgba(255,255,255,0.10)" : "1px solid rgba(0,0,0,0.10)", color: "var(--text-secondary)", fontSize: "0.75rem", fontWeight: 500, cursor: "pointer", transition: "all 0.2s" }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(212,175,55,0.45)"; e.currentTarget.style.color = "#D4AF37"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = dark ? "rgba(255,255,255,0.10)" : "rgba(0,0,0,0.10)"; e.currentTarget.style.color = "var(--text-secondary)"; }}
+            >
+              <Trash2 size={12} />
+              Clear chat
+            </button>
+          </div>
           {messages.map((m, i) => <MessageBubble key={i} msg={m} dark={dark} />)}
           {loading && (
             <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: "1rem" }}>
