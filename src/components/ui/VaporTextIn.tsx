@@ -1,125 +1,143 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 
-interface Particle {
-  x: number;
-  y: number;
-  cs: string; // "rgba(r,g,b,"
-  oa: number; // originalAlpha
-}
+type Particle = {
+  originalX: number;
+  originalY: number;
+  color: string;
+  originalAlpha: number;
+};
 
-interface Props {
-  text: string;
-  fontSize?: number;
-  fontFamily?: string;
-  fontWeight?: number;
-  color?: string;
-  duration?: number;
-  style?: React.CSSProperties;
+function parseRgb(color: string) {
+  const m = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+  return m ? `rgba(${m[1]},${m[2]},${m[3]},` : "rgba(0,0,0,";
 }
 
 export default function VaporTextIn({
   text,
-  fontSize = 32,
-  fontFamily = "sans-serif",
-  fontWeight = 700,
-  color = "rgba(0,0,0,0.88)",
-  duration = 900,
-  style,
-}: Props) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const rafRef    = useRef<number | null>(null);
+  font = { fontFamily: "sans-serif", fontSize: "32px", fontWeight: 700 },
+  color = "rgb(26,16,0)",
+  alignment = "center",
+  duration = 0.9,
+}: {
+  text: string;
+  font?: { fontFamily?: string; fontSize?: string; fontWeight?: number };
+  color?: string;
+  alignment?: "left" | "center" | "right";
+  duration?: number;
+}) {
+  const canvasRef  = useRef<HTMLCanvasElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const particles  = useRef<Particle[]>([]);
+  const fadeRef    = useRef(0);
+  const doneRef    = useRef(false);
+  const [size, setSize] = useState({ w: 0, h: 0 });
 
+  const dpr = useMemo(() => (typeof window !== "undefined" ? window.devicePixelRatio * 1.5 : 1), []);
+
+  // Observe wrapper size
+  useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([e]) => {
+      const { width, height } = e.contentRect;
+      setSize({ w: width, h: height });
+    });
+    ro.observe(el);
+    const r = el.getBoundingClientRect();
+    setSize({ w: r.width, h: r.height });
+    return () => ro.disconnect();
+  }, []);
+
+  // Build particle map whenever size or text changes
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas || !size.w || !size.h) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-    const dpr = Math.min((window.devicePixelRatio || 1) * 1.5, 3);
+    canvas.style.width  = `${size.w}px`;
+    canvas.style.height = `${size.h}px`;
+    canvas.width  = Math.floor(size.w * dpr);
+    canvas.height = Math.floor(size.h * dpr);
 
-    const build = (): Particle[] => {
-      const ctx = canvas.getContext("2d")!;
-      const fontStr = `${fontWeight} ${fontSize * dpr}px ${fontFamily}`;
+    const fs = parseInt(font.fontSize?.replace("px", "") || "32");
+    ctx.font         = `${font.fontWeight ?? 700} ${fs * dpr}px ${font.fontFamily ?? "sans-serif"}`;
+    ctx.textBaseline = "middle";
+    ctx.textAlign    = alignment;
+    ctx.fillStyle    = parseRgb(color) + "1)";
 
-      // measure
-      ctx.font = fontStr;
-      const m  = ctx.measureText(text);
-      const cw = Math.ceil(m.width) + 8;
-      const ch = Math.ceil(fontSize * 1.5);
+    const tx = alignment === "center" ? canvas.width / 2 : alignment === "left" ? 0 : canvas.width;
+    ctx.fillText(text, tx, canvas.height / 2);
 
-      canvas.style.width  = `${cw / dpr}px`;
-      canvas.style.height = `${ch / dpr}px`;
-      canvas.width  = cw;
-      canvas.height = ch;
+    const { data } = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const ps: Particle[] = [];
+    const sr = Math.max(1, Math.round(dpr / 3));
+    const colorPrefix = parseRgb(color);
 
-      // render text to sample pixels
-      ctx.clearRect(0, 0, cw, ch);
-      ctx.font         = fontStr;
-      ctx.fillStyle    = color;
-      ctx.textAlign    = "left";
-      ctx.textBaseline = "middle";
-      ctx.fillText(text, 0, ch / 2);
-
-      const { data } = ctx.getImageData(0, 0, cw, ch);
-      const step = Math.max(1, Math.round(dpr));
-      const out: Particle[] = [];
-
-      for (let y = 0; y < ch; y += step) {
-        for (let x = 0; x < cw; x += step) {
-          const i = (y * cw + x) * 4;
-          if (data[i + 3] > 0) {
-            out.push({
-              x, y,
-              cs: `rgba(${data[i]},${data[i+1]},${data[i+2]},`,
-              oa: (data[i + 3] / 255) * (step / dpr),
-            });
-          }
+    for (let y = 0; y < canvas.height; y += sr) {
+      for (let x = 0; x < canvas.width; x += sr) {
+        const i = (y * canvas.width + x) * 4;
+        if (data[i + 3] > 0) {
+          ps.push({
+            originalX: x,
+            originalY: y,
+            color: colorPrefix,
+            originalAlpha: (data[i + 3] / 255) * (sr / dpr),
+          });
         }
       }
+    }
 
-      ctx.clearRect(0, 0, cw, ch);
-      return out;
-    };
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.current = ps;
+    fadeRef.current   = 0;
+    doneRef.current   = false;
+  }, [size, text, color, dpr, font, alignment]);
 
-    const run = (particles: Particle[]) => {
-      let t0: number | null = null;
+  // Fade-in animation loop (in only — never vaporizes out)
+  useEffect(() => {
+    if (!particles.current.length) return;
+    let raf: number;
+    let last = performance.now();
+    doneRef.current = false;
 
-      const tick = (t: number) => {
-        if (t0 === null) t0 = t;
-        const p   = Math.min((t - t0) / duration, 1);
-        const ctx = canvas.getContext("2d")!;
+    const tick = (now: number) => {
+      if (doneRef.current) return;
+      const dt = (now - last) / 1000;
+      last = now;
 
+      fadeRef.current = Math.min(1, fadeRef.current + dt / duration);
+
+      const canvas = canvasRef.current;
+      const ctx = canvas?.getContext("2d");
+      if (canvas && ctx) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.save();
         ctx.scale(dpr, dpr);
-
-        particles.forEach(({ x, y, cs, oa }) => {
-          ctx.fillStyle = cs + p * oa + ")";
-          ctx.fillRect(x / dpr, y / dpr, 1, 1);
-        });
-
+        for (const p of particles.current) {
+          const op = fadeRef.current * p.originalAlpha;
+          ctx.fillStyle = p.color + op + ")";
+          ctx.fillRect(p.originalX / dpr, p.originalY / dpr, 1, 1);
+        }
         ctx.restore();
-        if (p < 1) rafRef.current = requestAnimationFrame(tick);
-      };
+      }
 
-      rafRef.current = requestAnimationFrame(tick);
+      if (fadeRef.current < 1) {
+        raf = requestAnimationFrame(tick);
+      } else {
+        doneRef.current = true;
+      }
     };
 
-    const init = () => run(build());
-
-    // wait for font before sampling
-    document.fonts?.ready ? document.fonts.ready.then(init) : init();
-
-    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
-  }, [text, fontSize, fontFamily, fontWeight, color, duration]);
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [particles.current.length, duration, dpr]);
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", ...style }}>
-      {/* hidden for a11y/SEO */}
-      <span style={{ position: "absolute", width: 0, height: 0, overflow: "hidden", userSelect: "none", pointerEvents: "none" }}>
-        {text}
-      </span>
-      <canvas ref={canvasRef} aria-hidden="true" style={{ display: "block" }} />
+    <div ref={wrapperRef} style={{ width: "100%", height: "100%", pointerEvents: "none" }}>
+      <canvas ref={canvasRef} style={{ display: "block", pointerEvents: "none" }} />
     </div>
   );
 }

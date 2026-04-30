@@ -2,9 +2,9 @@
 
 import { useState, useRef, useEffect } from "react";
 import { SendIcon, LoaderIcon, Sparkles, TrendingUp, Newspaper, ShieldCheck, BarChart2, Paperclip, X } from "lucide-react";
+import VaporTextIn from "@/components/ui/VaporTextIn";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/lib/theme";
-import VaporTextIn from "@/components/ui/VaporTextIn";
 
 interface ImageAttachment {
   base64: string;
@@ -226,15 +226,15 @@ export default function AIChatPage() {
             transition={{ duration: 0.4 }}
             style={{ textAlign: "center", marginBottom: "2.5rem", zIndex: 1, width: "100%", maxWidth: 640 }}
           >
-            <VaporTextIn
-              text="How can I help today?"
-              fontSize={32}
-              fontFamily="Plus Jakarta Sans, sans-serif"
-              fontWeight={700}
-              color={dark ? "rgba(255,255,255,0.88)" : "rgba(26,16,0,0.88)"}
-              duration={1000}
-              style={{ margin: "0 0 0.5rem" }}
-            />
+            <div style={{ width: "100%", height: "3rem", marginBottom: "0.5rem" }}>
+              <VaporTextIn
+                text="How can I help today?"
+                font={{ fontFamily: "var(--font-display, sans-serif)", fontSize: "32px", fontWeight: 700 }}
+                color={dark ? "rgb(245,244,238)" : "rgb(26,16,0)"}
+                alignment="center"
+                duration={1.0}
+              />
+            </div>
             <p style={{ fontSize: "0.875rem", color: "var(--text-secondary)", margin: 0 }}>
               Type a question or upload a chart for analysis
             </p>
