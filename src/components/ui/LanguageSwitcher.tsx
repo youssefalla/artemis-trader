@@ -41,7 +41,6 @@ export default function LanguageSwitcher({ compact = false, dropUp = false }: { 
         onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#D4AF37"; e.currentTarget.style.color = "#D4AF37"; }}
         onMouseLeave={(e) => { e.currentTarget.style.borderColor = dark ? "rgba(255,255,255,0.12)" : "rgba(0,0,0,0.10)"; e.currentTarget.style.color = "var(--text-secondary)"; }}
       >
-        <span style={{ fontSize: "1rem" }}>{current.flag}</span>
         {!compact && <span>{current.label}</span>}
         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" style={{ transform: open ? "rotate(180deg)" : "none", transition: "transform 0.2s" }}>
           <path d="M6 9l6 6 6-6" />
