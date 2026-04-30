@@ -79,14 +79,7 @@ export default function LoadingScreen() {
   const prevPath  = useRef(pathname);
 
   // "idle" | "showing" | "exiting"
-  const [state, setState] = useState<"idle" | "showing" | "exiting">("showing");
-
-  // ── Initial splash: auto-exit after 1.2 s ──
-  useEffect(() => {
-    const exit = setTimeout(() => setState("exiting"), 1200);
-    const hide = setTimeout(() => setState("idle"),    1600);
-    return () => { clearTimeout(exit); clearTimeout(hide); };
-  }, []);
+  const [state, setState] = useState<"idle" | "showing" | "exiting">("idle");
 
   // ── Navigation: show on link click, hide when pathname settles ──
   useEffect(() => {
