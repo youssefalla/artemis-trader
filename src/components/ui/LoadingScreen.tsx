@@ -32,8 +32,7 @@ const STYLES = `
   .ls-text  { animation: ls-fadein 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.18s both; }
   .ls-dot   { display:inline-block; animation: ls-pulse 1.1s ease-in-out 0.4s infinite; }
   .ls-sub   { animation: ls-fadein 0.4s ease 0.3s both; }
-  .ls-track { animation: ls-fadein 0.4s ease 0.38s both; }
-  .ls-fill  { animation: ls-bar 0.9s cubic-bezier(0.4,0,0.2,1) 0.42s both; }
+  .ls-line  { animation: ls-fadein 0.6s ease 0.38s both; }
 `;
 
 function Overlay({ exiting }: { exiting: boolean }) {
@@ -65,9 +64,11 @@ function Overlay({ exiting }: { exiting: boolean }) {
           Trading Automation
         </p>
 
-        <div className="ls-track" style={{ marginTop: "2rem", width: "7rem", height: "2px", borderRadius: "9999px", background: "rgba(212,175,55,0.18)", overflow: "hidden" }}>
-          <div className="ls-fill" style={{ height: "100%", borderRadius: "9999px", background: "linear-gradient(90deg,#D4AF37,#f0d060,#D4AF37)", width: 0 }} />
-        </div>
+        <div className="ls-line" style={{
+          marginTop: "2rem", width: "10rem", height: "2px",
+          background: "linear-gradient(90deg, transparent 0%, rgba(212,175,55,0.4) 20%, #D4AF37 50%, rgba(212,175,55,0.4) 80%, transparent 100%)",
+          boxShadow: "0 0 12px rgba(212,175,55,0.55), 0 0 32px rgba(212,175,55,0.2)",
+        }} />
       </div>
     </>
   );
