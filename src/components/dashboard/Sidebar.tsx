@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useTheme } from "@/lib/theme";
+import { useT } from "@/lib/i18n";
+import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 
 const ArtemisLogo = () => (
   <img src="/logo.png" alt="Artemis" width={28} height={28} style={{ objectFit: "contain" }} />
@@ -30,18 +32,19 @@ const MoonIcon = () => (
   </svg>
 );
 
-const navItems = [
-  { href: "/dashboard",          icon: LayoutDashboard, label: "Dashboard" },
-  { href: "/dashboard/ai-chat",  icon: Sparkles,        label: "Artemis AI" },
-  { href: "/dashboard/history",  icon: History,         label: "History"   },
-  { href: "/dashboard/settings", icon: Settings,        label: "Settings"  },
-];
-
 export default function Sidebar() {
   const pathname = usePathname();
   const router   = useRouter();
   const { theme, toggle } = useTheme();
+  const { T } = useT();
   const dark = theme === "dark";
+
+  const navItems = [
+    { href: "/dashboard",          icon: LayoutDashboard, label: T.sidebar.dashboard },
+    { href: "/dashboard/ai-chat",  icon: Sparkles,        label: T.sidebar.artemisAi },
+    { href: "/dashboard/history",  icon: History,         label: T.sidebar.history   },
+    { href: "/dashboard/settings", icon: Settings,        label: T.sidebar.settings  },
+  ];
 
   async function handleLogout() {
     const supabase = createClient();
@@ -88,7 +91,7 @@ export default function Sidebar() {
               <p className="font-display" style={{ fontSize: "1rem", color: "var(--text-primary)", lineHeight: 1.1 }}>
                 Artemis<span style={{ color: "#D4AF37" }}>·</span>Trader
               </p>
-              <p className="font-mono" style={{ fontSize: "0.6rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-secondary)", marginTop: "0.2rem" }}>Dashboard</p>
+              <p className="font-mono" style={{ fontSize: "0.6rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-secondary)", marginTop: "0.2rem" }}>{T.sidebar.dashboard}</p>
             </div>
           </Link>
         </div>
@@ -121,8 +124,11 @@ export default function Sidebar() {
 
         {/* Bottom */}
         <div style={{ padding: "0.75rem", borderTop: dark ? "1px solid rgba(212,175,55,0.12)" : "1px solid rgba(0,0,0,0.06)", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+          <div style={{ padding: "0.25rem 0.375rem" }}>
+            <LanguageSwitcher />
+          </div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.25rem 0.375rem" }}>
-            <span className="font-mono" style={{ fontSize: "0.6875rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-secondary)" }}>Theme</span>
+            <span className="font-mono" style={{ fontSize: "0.6875rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-secondary)" }}>{T.sidebar.theme}</span>
             <button onClick={toggle} aria-label="Toggle theme" style={{ width: "2rem", height: "2rem", borderRadius: "9999px", display: "grid", placeItems: "center", border: "1px solid rgba(10,10,10,0.1)", background: "transparent", cursor: "pointer", color: "var(--text-secondary)", transition: "border-color 0.2s, color 0.2s" }}
               onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#D4AF37")}
               onMouseLeave={(e) => (e.currentTarget.style.borderColor = "rgba(10,10,10,0.1)")}
@@ -135,7 +141,7 @@ export default function Sidebar() {
             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = "rgba(220,38,38,0.06)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(220,38,38,0.20)"; }}
           >
             <LogOut size={15} />
-            Log Out
+            {T.sidebar.logout}
           </button>
         </div>
       </aside>
@@ -176,12 +182,12 @@ export default function Sidebar() {
           <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 20, height: 20 }}>
             {theme === "dark" ? <SunIcon /> : <MoonIcon />}
           </span>
-          <span style={{ fontSize: "0.6rem", fontWeight: 500, letterSpacing: "0.04em", textTransform: "uppercase" }}>Theme</span>
+          <span style={{ fontSize: "0.6rem", fontWeight: 500, letterSpacing: "0.04em", textTransform: "uppercase" }}>{T.sidebar.theme}</span>
         </button>
 
         <button onClick={handleLogout} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25rem", padding: "0.5rem 0.75rem", borderRadius: "0.875rem", background: "transparent", border: "none", cursor: "pointer", color: "#f87171", flex: 1 }}>
           <LogOut size={20} strokeWidth={1.8} />
-          <span style={{ fontSize: "0.6rem", fontWeight: 500, letterSpacing: "0.04em", textTransform: "uppercase" }}>Logout</span>
+          <span style={{ fontSize: "0.6rem", fontWeight: 500, letterSpacing: "0.04em", textTransform: "uppercase" }}>{T.sidebar.logout}</span>
         </button>
       </nav>
     </>

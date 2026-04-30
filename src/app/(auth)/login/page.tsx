@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useTheme } from "@/lib/theme";
+import { useT } from "@/lib/i18n";
+import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 
 function SpaceBg({ dark }: { dark: boolean }) {
   // Dark: pure black sky, bright gold glow
@@ -154,6 +156,7 @@ function SpaceBg({ dark }: { dark: boolean }) {
 export default function LoginPage() {
   const router = useRouter();
   const { theme } = useTheme();
+  const { T } = useT();
   const dark = theme === "dark";
 
   const [email, setEmail]           = useState("");
@@ -216,11 +219,14 @@ export default function LoginPage() {
             </span>
           </Link>
           <h1 style={{ fontSize: "1.75rem", fontWeight: 700, color: headingColor, margin: 0, letterSpacing: "-0.02em" }}>
-            Welcome Back
+            {T.login.title}
           </h1>
           <p style={{ color: subColor, fontSize: "0.875rem", marginTop: "0.35rem" }}>
-            Log in to access your dashboard
+            {T.login.subtitle}
           </p>
+          <div style={{ marginTop: "0.75rem", display: "flex", justifyContent: "center" }}>
+            <LanguageSwitcher />
+          </div>
         </div>
 
         {/* Glass card */}
@@ -237,7 +243,7 @@ export default function LoginPage() {
           {/* Email */}
           <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
             <label style={{ fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase" as const, color: labelColor }}>
-              Email address
+              {T.login.emailLabel}
             </label>
             <input
               type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="example@gmail.com"
@@ -250,7 +256,7 @@ export default function LoginPage() {
           {/* Password */}
           <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
             <label style={{ fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase" as const, color: labelColor }}>
-              Password
+              {T.login.passwordLabel}
             </label>
             <div style={{ position: "relative" }}>
               <input
@@ -264,7 +270,7 @@ export default function LoginPage() {
               </button>
             </div>
             <div style={{ textAlign: "right" }}>
-              <span style={{ fontSize: "0.8rem", color: subColor, cursor: "pointer" }}>Forget Password ?</span>
+              <span style={{ fontSize: "0.8rem", color: subColor, cursor: "pointer" }}>{T.login.forgotPw}</span>
             </div>
           </div>
 
@@ -276,12 +282,12 @@ export default function LoginPage() {
             onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
           >
             {loading && <Loader2 size={16} className="animate-spin" />}
-            {loading ? "Logging in…" : "Login"}
+            {loading ? T.login.loading : T.login.btn}
           </button>
 
           <p style={{ textAlign: "center", fontSize: "0.875rem", color: subColor, margin: 0 }}>
-            Are You New Member?{" "}
-            <Link href="/signup" style={{ color: "#D4AF37", fontWeight: 700, textDecoration: "none" }}>Sign UP</Link>
+            {T.login.signupPrompt}{" "}
+            <Link href="/signup" style={{ color: "#D4AF37", fontWeight: 700, textDecoration: "none" }}>{T.login.signupLink}</Link>
           </p>
         </form>
       </div>

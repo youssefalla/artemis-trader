@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, JetBrains_Mono } from "next/font/google";
 import { cookies } from "next/headers";
 import { ThemeProvider } from "@/lib/theme";
+import { I18nProvider } from "@/lib/i18n";
 import LoadingScreen from "@/components/ui/LoadingScreen";
 import ThemeTransition from "@/components/ui/ThemeTransition";
 import "./globals.css";
@@ -55,11 +56,13 @@ export default async function RootLayout({
         />
       </head>
       <body className={`${jakarta.variable} ${mono.variable} antialiased`}>
-        <ThemeProvider>
-          <LoadingScreen />
-          <ThemeTransition />
-          {children}
-        </ThemeProvider>
+        <I18nProvider>
+          <ThemeProvider>
+            <LoadingScreen />
+            <ThemeTransition />
+            {children}
+          </ThemeProvider>
+        </I18nProvider>
       </body>
     </html>
   );

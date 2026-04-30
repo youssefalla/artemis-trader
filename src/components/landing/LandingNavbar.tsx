@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useTheme } from "@/lib/theme";
+import { useT } from "@/lib/i18n";
+import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 
 const ArtemisLogo = () => (
   <img src="/logo.png" alt="Artemis" width={28} height={28} style={{ objectFit: "contain" }} />
@@ -47,7 +49,15 @@ function scrollTo(id: string) {
 
 export default function LandingNavbar() {
   const { theme, toggle } = useTheme();
+  const { T } = useT();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const navLinks: [string, string][] = [
+    [T.nav.features, "features"],
+    [T.nav.howItWorks, "how"],
+    [T.nav.pricing, "pricing"],
+    [T.nav.voices, "voices"],
+  ];
 
   return (
     <header style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 9999, padding: "0.75rem 1rem" }}>
@@ -83,7 +93,7 @@ export default function LandingNavbar() {
 
         {/* Desktop links */}
         <ul className="hidden md:flex" style={{ alignItems: "center", gap: "1.75rem", listStyle: "none", margin: 0, padding: 0, marginLeft: "auto" }}>
-          {[["Features", "features"], ["How it works", "how"], ["Pricing", "pricing"], ["Voices", "voices"]].map(([label, id]) => (
+          {navLinks.map(([label, id]) => (
             <li key={id}>
               <button
                 onClick={() => scrollTo(id)}
@@ -99,6 +109,8 @@ export default function LandingNavbar() {
 
         {/* Actions */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginLeft: "auto" }} className="md:ml-0">
+          <LanguageSwitcher />
+
           <button
             onClick={toggle}
             aria-label="Toggle theme"
@@ -121,7 +133,7 @@ export default function LandingNavbar() {
             className="btn-gold"
             style={{ borderRadius: "9999px", padding: "0.625rem 1.25rem", fontSize: "0.875rem", fontWeight: 600, textDecoration: "none" }}
           >
-            Login
+            {T.nav.login}
           </Link>
         </div>
 
@@ -149,7 +161,7 @@ export default function LandingNavbar() {
             display: "flex", flexDirection: "column", gap: "1rem",
           }}
         >
-          {[["Features", "features"], ["How it works", "how"], ["Pricing", "pricing"], ["Voices", "voices"]].map(([label, id]) => (
+          {navLinks.map(([label, id]) => (
             <button
               key={id}
               onClick={() => { scrollTo(id); setMobileOpen(false); }}
@@ -158,9 +170,12 @@ export default function LandingNavbar() {
               {label}
             </button>
           ))}
-          <div style={{ display: "flex", gap: "0.75rem", paddingTop: "0.5rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", paddingTop: "0.25rem" }}>
+            <LanguageSwitcher compact />
+          </div>
+          <div style={{ display: "flex", gap: "0.75rem", paddingTop: "0.25rem" }}>
             <Link href="/login" style={{ flex: 1, textAlign: "center", fontSize: "0.875rem", padding: "0.625rem 1rem", border: "1px solid var(--border)", borderRadius: "9999px", color: "var(--text-primary)", textDecoration: "none" }}>
-              Log In
+              {T.nav.login}
             </Link>
             <a
               href="#pricing"
@@ -168,7 +183,7 @@ export default function LandingNavbar() {
               style={{ flex: 1, borderRadius: "9999px", padding: "0.625rem 1rem", fontSize: "0.875rem", textAlign: "center" }}
               onClick={() => setMobileOpen(false)}
             >
-              Get Started
+              {T.hero.cta1}
             </a>
           </div>
         </div>

@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { useT } from "@/lib/i18n";
 
 export default function Features() {
+  const { T } = useT();
   const heatmapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -32,19 +34,15 @@ export default function Features() {
     <section id="features" style={{ position: "relative", maxWidth: "72rem", margin: "0 auto", padding: "7rem 1.5rem" }}>
       <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "1.5rem", marginBottom: "3rem" }}>
         <div className="reveal-left">
-          <div className="font-mono" style={{ fontSize: "0.7rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "#D4AF37" }}>— Capabilities</div>
+          <div className="font-mono" style={{ fontSize: "0.7rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "#D4AF37" }}>— {T.features.label}</div>
           <h2 className="font-display blur-headline" data-blur="section" style={{ fontSize: "clamp(2.5rem, 6vw, 3.75rem)", letterSpacing: "-0.03em", marginTop: "0.75rem", lineHeight: 1 }}>
-            <span className="bw">A</span>{" "}
-            <span className="bw">Quiet</span>{" "}
-            <span className="bw">Engine.</span>
+            {T.features.title1}
             <br />
-            <span className="bw">A</span>{" "}
-            <span className="bw">Loud</span>{" "}
-            <span className="bw">Edge.</span>
+            {T.features.title2}
           </h2>
         </div>
         <p className="reveal-right" style={{ maxWidth: "26rem", color: "var(--text-secondary)", lineHeight: 1.7, fontSize: "1rem" }}>
-          Three pillars work in concert — automation, risk, and connectivity — so your strategies stay disciplined long after you&apos;ve left the desk.
+          {T.features.subtitle}
         </p>
       </div>
 
@@ -57,9 +55,9 @@ export default function Features() {
               <circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" />
             </svg>
           </div>
-          <h3 className="font-display" style={{ fontSize: "1.875rem", marginTop: "1.5rem" }}>24/7 Automation</h3>
+          <h3 className="font-display" style={{ fontSize: "1.875rem", marginTop: "1.5rem" }}>{T.features.feat1Title}</h3>
           <p style={{ marginTop: "0.75rem", color: "var(--text-secondary)", lineHeight: 1.7, maxWidth: "38rem" }}>
-            Strategies execute on every tick — across sessions, weekends, and holidays — without slippage from human hesitation. Set the rules, then sleep.
+            {T.features.feat1Desc}
           </p>
           <div ref={heatmapRef} style={{ marginTop: "2rem", display: "grid", gridTemplateColumns: "repeat(24, 1fr)", gap: "3px" }}>
             {Array.from({ length: 168 }).map((_, i) => (
@@ -84,9 +82,9 @@ export default function Features() {
               </div>
               <span className="font-mono" style={{ fontSize: "0.6875rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--text-secondary)" }}>02</span>
             </div>
-            <h3 className="font-display" style={{ fontSize: "1.5rem", marginTop: "1.5rem" }}>Risk Management</h3>
+            <h3 className="font-display" style={{ fontSize: "1.5rem", marginTop: "1.5rem" }}>{T.features.feat2Title}</h3>
             <p style={{ marginTop: "0.5rem", color: "var(--text-secondary)", fontSize: "0.9rem", lineHeight: 1.7 }}>
-              Daily-loss circuit breakers, position sizing by volatility, and per-strategy drawdown caps. The engine refuses to break your own rules.
+              {T.features.feat2Desc}
             </p>
             <div style={{ marginTop: "1.25rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
               <span className="font-mono" style={{ fontSize: "0.75rem", color: "var(--text-secondary)" }}>DRAWDOWN</span>
@@ -107,9 +105,9 @@ export default function Features() {
               </div>
               <span className="font-mono" style={{ fontSize: "0.6875rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--text-secondary)" }}>03</span>
             </div>
-            <h3 className="font-display" style={{ fontSize: "1.5rem", marginTop: "1.5rem" }}>Easy Broker Sync</h3>
+            <h3 className="font-display" style={{ fontSize: "1.5rem", marginTop: "1.5rem" }}>{T.features.feat3Title}</h3>
             <p style={{ marginTop: "0.5rem", color: "var(--text-secondary)", fontSize: "0.9rem", lineHeight: 1.7 }}>
-              Two-click connection to 30+ regulated brokers. Encrypted keys, read-write scoping, instant reconciliation.
+              {T.features.feat3Desc}
             </p>
             <div style={{ marginTop: "1.25rem", display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
               {["XM Broker", "OANDA", "Alpaca", "TradeStation"].map((b) => (

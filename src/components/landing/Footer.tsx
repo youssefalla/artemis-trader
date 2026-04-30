@@ -1,12 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import { useT } from "@/lib/i18n";
 
 const ArtemisLogo = () => (
   <img src="/logo.png" alt="Artemis" width={28} height={28} style={{ objectFit: "contain" }} />
 );
 
 export default function Footer() {
+  const { T } = useT();
+
   return (
     <footer className="reveal" style={{ padding: "5rem 1.5rem 2.5rem" }}>
       <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
@@ -44,9 +47,9 @@ export default function Footer() {
 
           {/* Product */}
           <div>
-            <div className="font-mono" style={{ fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--text-secondary)", opacity: 0.6 }}>Product</div>
+            <div className="font-mono" style={{ fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--text-secondary)", opacity: 0.6 }}>{T.footer.product}</div>
             <ul style={{ marginTop: "1rem", listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "0.625rem" }}>
-              {["Features", "Pricing", "Strategies", "Brokers"].map((item) => (
+              {[T.footer.lFeatures, T.footer.lPricing, T.footer.lHow, T.footer.lDocs].map((item) => (
                 <li key={item}>
                   <a href="#" style={{ fontSize: "0.875rem", color: "var(--text-primary)", textDecoration: "none", transition: "color 0.2s" }}
                     onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#D4AF37")}
@@ -60,9 +63,9 @@ export default function Footer() {
 
           {/* Company */}
           <div>
-            <div className="font-mono" style={{ fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--text-secondary)", opacity: 0.6 }}>Company</div>
+            <div className="font-mono" style={{ fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--text-secondary)", opacity: 0.6 }}>{T.footer.company}</div>
             <ul style={{ marginTop: "1rem", listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "0.625rem" }}>
-              {["About", "Careers", "Press", "Contact"].map((item) => (
+              {[T.footer.lAbout, T.footer.lCareers, T.footer.lBlog].map((item) => (
                 <li key={item}>
                   <a href="#" style={{ fontSize: "0.875rem", color: "var(--text-primary)", textDecoration: "none", transition: "color 0.2s" }}
                     onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#D4AF37")}
@@ -74,11 +77,11 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Resources */}
+          {/* Legal */}
           <div>
-            <div className="font-mono" style={{ fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--text-secondary)", opacity: 0.6 }}>Resources</div>
+            <div className="font-mono" style={{ fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--text-secondary)", opacity: 0.6 }}>{T.footer.legal}</div>
             <ul style={{ marginTop: "1rem", listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "0.625rem" }}>
-              {["Documentation", "Backtesting Lab", "Risk Calculator", "Community"].map((item) => (
+              {[T.footer.lPrivacy, T.footer.lTerms, T.footer.lSecurity].map((item) => (
                 <li key={item}>
                   <a href="#" style={{ fontSize: "0.875rem", color: "var(--text-primary)", textDecoration: "none", transition: "color 0.2s" }}
                     onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#D4AF37")}
@@ -93,31 +96,8 @@ export default function Footer() {
 
         <div className="gold-rule" style={{ marginTop: "3.5rem" }} />
 
-        <div style={{ marginTop: "2rem", display: "grid", gridTemplateColumns: "2fr 1fr", gap: "1.5rem", fontSize: "0.75rem", color: "var(--text-secondary)" }}>
-          <div>
-            <div className="font-mono" style={{ textTransform: "uppercase", letterSpacing: "0.12em", opacity: 0.6, marginBottom: "0.5rem" }}>Legal Disclaimer</div>
-            <p style={{ lineHeight: 1.7 }}>
-              Trading carries substantial risk and may result in the loss of all invested capital. Past performance is not indicative of future results. Artemis-Trader is a software tool — not a broker, dealer, or registered investment adviser. Information on this site is for educational purposes only and does not constitute investment, legal, or tax advice.
-            </p>
-          </div>
-          <div style={{ textAlign: "right" }}>
-            <div className="font-mono" style={{ textTransform: "uppercase", letterSpacing: "0.12em", opacity: 0.6, marginBottom: "0.5rem" }}>Compliance</div>
-            <ul style={{ listStyle: "none", padding: 0, display: "flex", flexDirection: "column", gap: "0.25rem" }}>
-              {["Terms of Service", "Privacy Policy", "Risk Disclosure", "Cookie Settings"].map((item) => (
-                <li key={item}>
-                  <a href="#" style={{ color: "var(--text-secondary)", textDecoration: "none", transition: "color 0.2s" }}
-                    onMouseEnter={(e) => ((e.target as HTMLElement).style.color = "#D4AF37")}
-                    onMouseLeave={(e) => ((e.target as HTMLElement).style.color = "var(--text-secondary)")}>
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        <div className="font-mono" style={{ marginTop: "2.5rem", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", fontSize: "0.7rem", color: "var(--text-secondary)", opacity: 0.6 }}>
-          <span>© 2026 Artemis-Trader, Inc. All rights reserved.</span>
+        <div className="font-mono" style={{ marginTop: "2rem", display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "0.75rem", fontSize: "0.7rem", color: "var(--text-secondary)", opacity: 0.6 }}>
+          <span>{T.footer.copy}</span>
           <span>Crafted in low light · Designed to disappear.</span>
         </div>
       </div>

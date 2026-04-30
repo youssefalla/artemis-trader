@@ -1,42 +1,28 @@
-const steps = [
-  {
-    num: "01",
-    title: "Connect a broker.",
-    desc: "Choose from 30+ regulated brokers. Authorize with read-trade permissions only — Artemis can never withdraw.",
-    time: "~ 90 seconds",
-  },
-  {
-    num: "02",
-    title: "Pick a strategy.",
-    desc: "Browse our curated library, fork a community strategy, or write your own. Every choice is backtested across 10 years of data.",
-    time: "~ 4 minutes",
-  },
-  {
-    num: "03",
-    title: "Set your rails. Sleep.",
-    desc: "Daily-loss caps, max positions, allowed hours. Hit deploy. Artemis runs in the cloud — your laptop can be closed.",
-    time: "~ 3 minutes",
-  },
-];
+"use client";
+
+import { useT } from "@/lib/i18n";
 
 export default function HowItWorks() {
+  const { T } = useT();
+
+  const steps = [
+    { num: "01", title: T.how.step1Title, desc: T.how.step1Desc, time: T.how.step1Time },
+    { num: "02", title: T.how.step2Title, desc: T.how.step2Desc, time: T.how.step2Time },
+    { num: "03", title: T.how.step3Title, desc: T.how.step3Desc, time: T.how.step3Time },
+  ];
+
   return (
     <section id="how" style={{ position: "relative" }}>
       <div style={{ maxWidth: "56rem", margin: "0 auto", padding: "7rem 1.5rem" }}>
         <div className="reveal" style={{ textAlign: "center", maxWidth: "36rem", margin: "0 auto 5rem" }}>
-          <div className="font-mono" style={{ fontSize: "0.7rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "#D4AF37" }}>— How it works</div>
+          <div className="font-mono" style={{ fontSize: "0.7rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "#D4AF37" }}>— {T.how.label}</div>
           <h2 className="font-display blur-headline" data-blur="section" style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)", letterSpacing: "-0.03em", marginTop: "0.75rem", lineHeight: 1 }}>
-            <span className="bw">Live</span>{" "}
-            <span className="bw">In</span>{" "}
-            <span className="bw">Under</span>{" "}
-            <span className="bw">Nine</span>{" "}
-            <span className="bw">Minutes.</span>
+            {T.how.title}
           </h2>
-          <p style={{ marginTop: "1.25rem", color: "var(--text-secondary)" }}>Three deliberate steps. No code, no callbacks, no consultations.</p>
+          <p style={{ marginTop: "1.25rem", color: "var(--text-secondary)" }}>{T.how.subtitle}</p>
         </div>
 
         <ol style={{ position: "relative", listStyle: "none", padding: 0, margin: 0 }} className="stagger">
-          {/* Vertical line */}
           <span style={{ position: "absolute", left: "1.6875rem", top: "0.5rem", bottom: "0.5rem", width: "1px", background: "linear-gradient(to bottom, transparent, rgba(212,175,55,0.4), transparent)" }} />
 
           {steps.map(({ num, title, desc, time }, i) => (

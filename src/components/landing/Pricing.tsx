@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
+import { useT } from "@/lib/i18n";
 
 function runCanvas(canvas: HTMLCanvasElement) {
   const ctx = canvas.getContext("2d");
@@ -59,46 +60,47 @@ function runCanvas(canvas: HTMLCanvasElement) {
   };
 }
 
-const plans = [
-  {
-    tier: "Trial",
-    price: "$0",
-    sub: "7 days · full access",
-    features: ["One connected broker", "3 active strategies", "Email support", "No credit card required"],
-    cta: "Begin Trial",
-    href: "/signup",
-    featured: false,
-    badge: null,
-    ctaClass: "btn-outline",
-  },
-  {
-    tier: "Trader",
-    price: "$25",
-    priceSuffix: "/mo",
-    sub: "Billed monthly · cancel anytime",
-    features: ["3 connected brokers", "Unlimited strategies", "Risk Management Suite", "Backtesting · 10 years", "Priority chat support"],
-    cta: "Start as Trader",
-    href: "/signup",
-    featured: true,
-    badge: "★ Most Popular",
-    ctaClass: "btn-gold",
-  },
-  {
-    tier: "Elite",
-    price: "$210",
-    priceSuffix: "/yr",
-    sub: "Equiv. $17.50/mo · billed annually",
-    features: ["Everything in Trader", "Unlimited brokers", "Custom indicators API", "Dedicated success manager", "Quarterly strategy review"],
-    cta: "Go Elite",
-    href: "/signup",
-    featured: false,
-    badge: "Save 30%",
-    ctaClass: "btn-outline",
-  },
-];
-
 export default function Pricing() {
+  const { T } = useT();
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  const plans = [
+    {
+      tier: T.pricing.trialTier,
+      price: "$0",
+      sub: T.pricing.trialSub,
+      features: [T.pricing.trialF1, T.pricing.trialF2, T.pricing.trialF3, T.pricing.trialF4],
+      cta: T.pricing.trialCta,
+      href: "/signup",
+      featured: false,
+      badge: null as string | null,
+      ctaClass: "btn-outline",
+    },
+    {
+      tier: T.pricing.traderTier,
+      price: "$25",
+      priceSuffix: "/mo",
+      sub: T.pricing.traderSub,
+      features: [T.pricing.traderF1, T.pricing.traderF2, T.pricing.traderF3, T.pricing.traderF4, T.pricing.traderF5],
+      cta: T.pricing.traderCta,
+      href: "/signup",
+      featured: true,
+      badge: T.pricing.traderBadge,
+      ctaClass: "btn-gold",
+    },
+    {
+      tier: T.pricing.eliteTier,
+      price: "$210",
+      priceSuffix: "/yr",
+      sub: T.pricing.eliteSub,
+      features: [T.pricing.eliteF1, T.pricing.eliteF2, T.pricing.eliteF3, T.pricing.eliteF4, T.pricing.eliteF5],
+      cta: T.pricing.eliteCta,
+      href: "/signup",
+      featured: false,
+      badge: T.pricing.eliteBadge,
+      ctaClass: "btn-outline",
+    },
+  ];
 
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -110,20 +112,14 @@ export default function Pricing() {
       <canvas ref={canvasRef} aria-hidden="true" />
       <div style={{ position: "relative", maxWidth: "72rem", margin: "0 auto" }}>
         <div className="reveal" style={{ textAlign: "center", maxWidth: "36rem", margin: "0 auto" }}>
-          <div className="font-mono" style={{ fontSize: "0.7rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "#D4AF37" }}>— Pricing</div>
+          <div className="font-mono" style={{ fontSize: "0.7rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "#D4AF37" }}>— {T.pricing.label}</div>
           <h2 className="font-display blur-headline" data-blur="section" style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)", letterSpacing: "-0.03em", marginTop: "0.75rem", lineHeight: 1 }}>
-            <span className="bw">Priced</span>{" "}
-            <span className="bw">Like</span>{" "}
-            <span className="bw">A</span>{" "}
-            <span className="bw">Tool.</span>
+            {T.pricing.title1}
             <br />
-            <span className="bw">Earns</span>{" "}
-            <span className="bw">Like</span>{" "}
-            <span className="bw">An</span>{" "}
-            <span className="bw">Asset.</span>
+            {T.pricing.title2}
           </h2>
           <p style={{ marginTop: "1.25rem", color: "var(--text-secondary)" }}>
-            Start free. Upgrade when the engine has paid for itself — usually inside week one.
+            {T.pricing.subtitle}
           </p>
         </div>
 
@@ -162,7 +158,7 @@ export default function Pricing() {
         </div>
 
         <div className="font-mono reveal" style={{ marginTop: "2.5rem", textAlign: "center", fontSize: "0.75rem", color: "var(--text-secondary)" }}>
-          All plans include 256-bit encryption · Read-only execution scopes · 99.9% uptime SLA
+          {T.pricing.footer}
         </div>
       </div>
     </section>

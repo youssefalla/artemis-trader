@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { SendIcon, LoaderIcon, Sparkles, TrendingUp, Newspaper, ShieldCheck, BarChart2, Paperclip, X, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "@/lib/theme";
+import { useT } from "@/lib/i18n";
 
 interface ImageAttachment {
   base64: string;
@@ -52,12 +53,6 @@ function TypeWriter({ text, speed = 38 }: { text: string; speed?: number }) {
   );
 }
 
-const QUICK_PROMPTS = [
-  { icon: <TrendingUp size={13} />, label: "Gold market today",  text: "What's happening with Gold (XAUUSD) in the market today?" },
-  { icon: <Newspaper size={13} />,  label: "Forex news",         text: "What are the latest important Forex market news and events?" },
-  { icon: <BarChart2 size={13} />,  label: "Best pairs now",     text: "Which currency pairs have the best trading opportunities right now?" },
-  { icon: <ShieldCheck size={13} />,label: "Risk management",    text: "Give me key risk management tips for Forex and Gold trading." },
-];
 
 function TypingDots() {
   return (
@@ -125,7 +120,15 @@ const STORAGE_KEY = "artemis_ai_chat_messages";
 
 export default function AIChatPage() {
   const { theme } = useTheme();
+  const { T } = useT();
   const dark = theme === "dark";
+
+  const QUICK_PROMPTS = [
+    { icon: <TrendingUp size={13} />, label: T.aiChat.prompt1Label, text: T.aiChat.prompt1Text },
+    { icon: <Newspaper size={13} />,  label: T.aiChat.prompt2Label, text: T.aiChat.prompt2Text },
+    { icon: <BarChart2 size={13} />,  label: T.aiChat.prompt3Label, text: T.aiChat.prompt3Text },
+    { icon: <ShieldCheck size={13} />,label: T.aiChat.prompt4Label, text: T.aiChat.prompt4Text },
+  ];
 
   const [messages, setMessages]   = useState<Message[]>(() => {
     if (typeof window === "undefined") return [];
@@ -280,10 +283,10 @@ export default function AIChatPage() {
             style={{ textAlign: "center", marginBottom: "2.5rem", zIndex: 1, width: "100%", maxWidth: 640 }}
           >
             <h1 className="font-display" style={{ fontSize: "2rem", fontWeight: 700, color: "var(--text-primary)", margin: "0 0 0.5rem", letterSpacing: "-0.03em" }}>
-              <TypeWriter text="How can I help today?" speed={42} />
+              <TypeWriter text={T.aiChat.heading} speed={42} />
             </h1>
             <p style={{ fontSize: "0.875rem", color: "var(--text-secondary)", margin: 0 }}>
-              Type a question or upload a chart for analysis
+              {T.aiChat.subtext}
             </p>
           </motion.div>
         )}
@@ -300,7 +303,7 @@ export default function AIChatPage() {
               onMouseLeave={e => { e.currentTarget.style.borderColor = dark ? "rgba(255,255,255,0.10)" : "rgba(0,0,0,0.10)"; e.currentTarget.style.color = "var(--text-secondary)"; }}
             >
               <Trash2 size={12} />
-              Clear chat
+              {T.aiChat.clearChat}
             </button>
           </div>
           {messages.map((m, i) => <MessageBubble key={i} msg={m} dark={dark} />)}
@@ -357,7 +360,7 @@ export default function AIChatPage() {
               value={input}
               onChange={onInput}
               onKeyDown={onKey}
-              placeholder={image ? "Ask about this chart…" : "Ask Artemis AI a question…"}
+              placeholder={image ? T.aiChat.chartPlaceholder : T.aiChat.placeholder}
               rows={1}
               style={{ width: "100%", boxSizing: "border-box", resize: "none", height: "28px", maxHeight: "140px", background: "transparent", border: "none", outline: "none", fontSize: "0.9375rem", color: "var(--text-primary)", fontFamily: "inherit", lineHeight: 1.55 }}
             />
@@ -400,7 +403,7 @@ export default function AIChatPage() {
               }}
             >
               {loading ? <LoaderIcon size={14} style={{ animation: "spin 1s linear infinite" }} /> : <SendIcon size={14} />}
-              <span>Send</span>
+              <span>{T.aiChat.send}</span>
             </button>
           </div>
         </div>
@@ -431,7 +434,7 @@ export default function AIChatPage() {
         </AnimatePresence>
 
         <p style={{ textAlign: "center", fontSize: "0.7rem", color: "var(--text-secondary)", opacity: 0.6, margin: "0.875rem 0 0" }}>
-          Artemis AI provides analysis only — not financial advice.
+          {T.aiChat.disclaimer}
         </p>
       </motion.div>
     </div>

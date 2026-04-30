@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Loader2, CheckCircle } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useTheme } from "@/lib/theme";
+import { useT } from "@/lib/i18n";
+import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
 
 function SpaceBg({ dark }: { dark: boolean }) {
   const r = dark ? "212,175,55" : "160,110,0";
@@ -56,6 +58,7 @@ function SpaceBg({ dark }: { dark: boolean }) {
 export default function SignupPage() {
   const router = useRouter();
   const { theme } = useTheme();
+  const { T } = useT();
   const dark = theme === "dark";
 
   const [fullName, setFullName]         = useState("");
@@ -114,12 +117,12 @@ export default function SignupPage() {
         <SpaceBg dark={dark} />
         <div style={{ ...glassStyle, position: "relative", zIndex: 1, textAlign: "center", maxWidth: "26rem", width: "100%", padding: "2.5rem 2rem" }}>
           <CheckCircle size={52} style={{ color: "#D4AF37", margin: "0 auto 1.25rem" }} />
-          <h2 style={{ fontSize: "1.75rem", fontWeight: 700, color: headingColor, marginBottom: "0.75rem", letterSpacing: "-0.02em" }}>Check your email</h2>
+          <h2 style={{ fontSize: "1.75rem", fontWeight: 700, color: headingColor, marginBottom: "0.75rem", letterSpacing: "-0.02em" }}>{T.signup.successTitle}</h2>
           <p style={{ color: subColor, fontSize: "0.9rem", lineHeight: 1.7 }}>
-            We sent a verification link to <strong style={{ color: headingColor }}>{email}</strong>. Click it to activate your account.
+            {T.signup.successDesc} <strong style={{ color: headingColor }}>{email}</strong>{T.signup.successDesc2}
           </p>
           <Link href="/login" style={{ display: "inline-block", marginTop: "1.5rem", color: "#D4AF37", fontWeight: 700, textDecoration: "none", fontSize: "0.875rem" }}>
-            Back to login →
+            {T.signup.backToLogin}
           </Link>
         </div>
       </div>
@@ -139,8 +142,11 @@ export default function SignupPage() {
               ARTEMIS<span style={{ color: "#D4AF37" }}>·</span>TRADER
             </span>
           </Link>
-          <h1 style={{ fontSize: "1.75rem", fontWeight: 700, color: headingColor, margin: 0, letterSpacing: "-0.02em" }}>Create Account</h1>
-          <p style={{ color: subColor, fontSize: "0.875rem", marginTop: "0.35rem" }}>Start trading smarter in minutes</p>
+          <h1 style={{ fontSize: "1.75rem", fontWeight: 700, color: headingColor, margin: 0, letterSpacing: "-0.02em" }}>{T.signup.title}</h1>
+          <p style={{ color: subColor, fontSize: "0.875rem", marginTop: "0.35rem" }}>{T.signup.subtitle}</p>
+          <div style={{ marginTop: "0.75rem", display: "flex", justifyContent: "center" }}>
+            <LanguageSwitcher />
+          </div>
         </div>
 
         <form onSubmit={handleSignup} style={glassStyle}>
@@ -151,7 +157,7 @@ export default function SignupPage() {
           )}
 
           <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-            <label style={{ fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: labelColor }}>Full Name</label>
+            <label style={{ fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: labelColor }}>{T.signup.nameLabel}</label>
             <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} required placeholder="John Doe"
               style={inputStyle}
               onFocus={(e) => { e.target.style.borderColor = "#D4AF37"; e.target.style.background = inputFocusBg; }}
@@ -160,7 +166,7 @@ export default function SignupPage() {
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-            <label style={{ fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: labelColor }}>Email address</label>
+            <label style={{ fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: labelColor }}>{T.signup.emailLabel}</label>
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="example@gmail.com"
               style={inputStyle}
               onFocus={(e) => { e.target.style.borderColor = "#D4AF37"; e.target.style.background = inputFocusBg; }}
@@ -169,7 +175,7 @@ export default function SignupPage() {
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-            <label style={{ fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: labelColor }}>Password</label>
+            <label style={{ fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: labelColor }}>{T.signup.passwordLabel}</label>
             <div style={{ position: "relative" }}>
               <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required minLength={8} placeholder="Min. 8 characters"
                 style={{ ...inputStyle, paddingRight: "3rem" }}
@@ -188,12 +194,12 @@ export default function SignupPage() {
             onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
           >
             {loading && <Loader2 size={16} className="animate-spin" />}
-            {loading ? "Creating account…" : "Create Account"}
+            {loading ? T.signup.loading : T.signup.btn}
           </button>
 
           <p style={{ textAlign: "center", fontSize: "0.875rem", color: subColor, margin: 0 }}>
-            Already have an account?{" "}
-            <Link href="/login" style={{ color: "#D4AF37", fontWeight: 700, textDecoration: "none" }}>Log In</Link>
+            {T.signup.loginPrompt}{" "}
+            <Link href="/login" style={{ color: "#D4AF37", fontWeight: 700, textDecoration: "none" }}>{T.signup.loginLink}</Link>
           </p>
         </form>
       </div>
