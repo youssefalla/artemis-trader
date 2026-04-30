@@ -1,3 +1,7 @@
+"use client";
+
+import { useT } from "@/lib/i18n";
+
 const Stars = () => (
   <div style={{ display: "flex", alignItems: "center", gap: "0.125rem" }}>
     {[1,2,3,4,5].map((i) => <span key={i} style={{ color: "#D4AF37" }}>★</span>)}
@@ -111,19 +115,14 @@ function Card({ t }: { t: typeof col1[0] & { large?: boolean; featured?: boolean
 }
 
 export default function Testimonials() {
+  const { T } = useT();
   return (
     <section id="voices" style={{ maxWidth: "72rem", margin: "0 auto", padding: "7rem 1.5rem" }}>
       <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "1.5rem", marginBottom: "3.5rem" }}>
         <div className="reveal-left">
-          <div className="font-mono" style={{ fontSize: "0.7rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "#D4AF37" }}>— Voices</div>
+          <div className="font-mono" style={{ fontSize: "0.7rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "#D4AF37" }}>— {T.testimonials.label}</div>
           <h2 className="font-display blur-headline" data-blur="section" style={{ fontSize: "clamp(2.5rem, 6vw, 3.75rem)", letterSpacing: "-0.03em", marginTop: "0.75rem", lineHeight: 1 }}>
-            <span className="bw">From</span>{" "}
-            <span className="bw">Traders</span>{" "}
-            <span className="bw">Who</span>
-            <br />
-            <span className="bw">Actually</span>{" "}
-            <span className="bw">Sleep</span>{" "}
-            <span className="bw">Now.</span>
+            {T.testimonials.title}
           </h2>
         </div>
         <div className="reveal-right" style={{ display: "flex", alignItems: "center", gap: "0.75rem", fontSize: "0.875rem" }}>

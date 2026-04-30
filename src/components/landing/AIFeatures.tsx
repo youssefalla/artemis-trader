@@ -1,21 +1,22 @@
+"use client";
+
+import { useT } from "@/lib/i18n";
+
 export default function AIFeatures() {
+  const { T } = useT();
+
   return (
     <section id="ai" style={{ position: "relative", padding: "7rem 1.5rem" }}>
       <div style={{ maxWidth: "72rem", margin: "0 auto" }}>
         <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: "1.5rem", marginBottom: "3rem" }}>
           <div className="reveal-left">
-            <div className="font-mono" style={{ fontSize: "0.7rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "#D4AF37" }}>— AI Features</div>
+            <div className="font-mono" style={{ fontSize: "0.7rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "#D4AF37" }}>— {T.aiFeatures.label}</div>
             <h2 className="font-display blur-headline" data-blur="section" style={{ fontSize: "clamp(2.5rem, 6vw, 3.75rem)", letterSpacing: "-0.03em", marginTop: "0.75rem", lineHeight: 1 }}>
-              <span className="bw">Intelligence,</span>
-              <br />
-              <span className="bw">Woven</span>{" "}
-              <span className="bw">Into</span>{" "}
-              <span className="bw">Every</span>{" "}
-              <span className="bw">Trade.</span>
+              {T.aiFeatures.title}
             </h2>
           </div>
           <p className="reveal-right" style={{ maxWidth: "26rem", color: "var(--text-secondary)", lineHeight: 1.7 }}>
-            Three machine-learning systems work in the background — predicting, monitoring, and protecting — so your edge stays sharp as the market shifts.
+            {T.aiFeatures.subtitle}
           </p>
         </div>
 
@@ -27,10 +28,10 @@ export default function AIFeatures() {
               <div style={{ display: "grid", gap: "2rem", alignItems: "center" }} className="md:grid-cols-2">
                 <div>
                   <h3 className="font-display" style={{ color: "var(--text-primary)", fontSize: "clamp(1.75rem, 4vw, 2.5rem)", lineHeight: 1.05 }}>
-                    Real-Time<br />Signal Tracking
+                    {T.aiFeatures.card1Title}
                   </h3>
                   <p style={{ color: "var(--text-secondary)", marginTop: "1.5rem", maxWidth: "22rem", lineHeight: 1.7 }}>
-                    Monitor incoming and outgoing trade signals instantly from a unified, AI-curated dashboard.
+                    {T.aiFeatures.card1Desc}
                   </p>
                   <div className="font-mono" style={{ marginTop: "1.5rem", display: "inline-flex", alignItems: "center", gap: "0.5rem", fontSize: "0.6875rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#D4AF37" }}>
                     <span style={{ width: "0.375rem", height: "0.375rem", borderRadius: "9999px", background: "#D4AF37", animation: "digit-pulse 1.6s ease-in-out infinite" }} />
@@ -76,7 +77,7 @@ export default function AIFeatures() {
             </div>
           </div>
 
-          {/* Bottom two cards */}
+          {/* Bottom three cards */}
           <div style={{ display: "grid", gap: "1.25rem" }} className="md:grid-cols-3">
             {/* Trade Monitoring */}
             <div className="ai-card reveal" style={{ minHeight: "380px" }}>
@@ -95,9 +96,9 @@ export default function AIFeatures() {
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)" strokeWidth="1.5"><rect x="3" y="6" width="18" height="13" rx="2" /><path d="M7 6V4M17 6V4M3 11h18" /></svg>
                   </div>
                 </div>
-                <h3 className="font-display" style={{ color: "var(--text-primary)", fontSize: "1.5rem", marginTop: "1rem" }}>Trade Monitoring</h3>
+                <h3 className="font-display" style={{ color: "var(--text-primary)", fontSize: "1.5rem", marginTop: "1rem" }}>{T.aiFeatures.card2Title}</h3>
                 <p style={{ color: "var(--text-secondary)", fontSize: "0.875rem", marginTop: "0.5rem", lineHeight: 1.7 }}>
-                  View detailed execution history with AI-tagged anomalies across every connected venue.
+                  {T.aiFeatures.card2Desc}
                 </p>
               </div>
             </div>
@@ -106,7 +107,6 @@ export default function AIFeatures() {
             <div className="ai-card reveal" style={{ minHeight: "380px" }}>
               <div className="ai-content" style={{ height: "100%", padding: "1.75rem", display: "flex", flexDirection: "column" }}>
                 <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "1.5rem" }}>
-                  {/* Animated ring */}
                   <div className="floaty" style={{ position: "relative", width: "130px", height: "130px" }}>
                     <svg viewBox="0 0 140 140" style={{ width: "100%", height: "100%", transform: "rotate(-90deg)" }}>
                       <circle cx="70" cy="70" r="54" fill="none" stroke="rgba(212,175,55,0.12)" strokeWidth="9" />
@@ -118,7 +118,6 @@ export default function AIFeatures() {
                       <span className="font-mono" style={{ fontSize: "0.55rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "#D4AF37", marginTop: "0.3rem" }}>Win Rate</span>
                     </div>
                   </div>
-                  {/* Mini stats */}
                   <div style={{ display: "flex", gap: "1.5rem" }}>
                     {[["Sharpe", "2.4"], ["Max DD", "−8%"], ["Trades", "142"]].map(([label, val]) => (
                       <div key={label} className="perf-stat" style={{ textAlign: "center" }}>
@@ -128,16 +127,16 @@ export default function AIFeatures() {
                     ))}
                   </div>
                 </div>
-                <h3 className="font-display" style={{ color: "var(--text-primary)", fontSize: "1.5rem", marginTop: "1rem" }}>Strategy Performance</h3>
+                <h3 className="font-display" style={{ color: "var(--text-primary)", fontSize: "1.5rem", marginTop: "1rem" }}>{T.aiFeatures.card3Title}</h3>
                 <p style={{ color: "var(--text-secondary)", fontSize: "0.875rem", marginTop: "0.5rem", lineHeight: 1.7 }}>
-                  Track win rate, Sharpe ratio, and max drawdown across every active strategy in real time.
+                  {T.aiFeatures.card3Desc}
                 </p>
               </div>
             </div>
 
             {/* Secure Capital Protection */}
             <div className="ai-card glow-right reveal" style={{ minHeight: "380px" }}>
-              <div className="ai-content" style={{ height: "100%", padding: "1.75rem", display: "flex", flexDirection: "column", gridColumn: "span 2" }}>
+              <div className="ai-content" style={{ height: "100%", padding: "1.75rem", display: "flex", flexDirection: "column" }}>
                 <div style={{ flex: 1, display: "grid", placeItems: "center" }}>
                   <div style={{ position: "relative", width: "240px", height: "200px" }}>
                     <div style={{ position: "absolute", left: "50%", top: "-0.25rem", transform: "translateX(-50%)", width: "2.75rem", height: "2.75rem", borderRadius: "9999px", background: "rgba(212,175,55,0.10)", border: "1px solid rgba(212,175,55,0.35)", display: "grid", placeItems: "center", color: "#D4AF37", zIndex: 10 }}>
@@ -167,9 +166,9 @@ export default function AIFeatures() {
                     </svg>
                   </div>
                 </div>
-                <h3 className="font-display" style={{ color: "var(--text-primary)", fontSize: "1.5rem", marginTop: "1rem" }}>Secure Capital Protection</h3>
+                <h3 className="font-display" style={{ color: "var(--text-primary)", fontSize: "1.5rem", marginTop: "1rem" }}>{T.aiFeatures.card4Title}</h3>
                 <p style={{ color: "var(--text-secondary)", fontSize: "0.875rem", marginTop: "0.5rem", lineHeight: 1.7, maxWidth: "28rem" }}>
-                  Keep every position guarded with AI-driven risk firewalls, anomaly detection, and end-to-end encryption.
+                  {T.aiFeatures.card4Desc}
                 </p>
               </div>
             </div>

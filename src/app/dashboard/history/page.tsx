@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import TradeHistoryTable from "@/components/dashboard/TradeHistoryTable";
+import HistoryView from "@/components/dashboard/HistoryView";
 import type { TradeHistory } from "@/types";
 
 export default async function HistoryPage() {
@@ -16,15 +16,5 @@ export default async function HistoryPage() {
 
   const trades: TradeHistory[] = data ?? [];
 
-  return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="font-display" style={{ fontSize: "2rem", letterSpacing: "-0.03em", color: "var(--text-primary)" }}>Trade History</h1>
-        <p className="text-sm text-[var(--text-secondary)] mt-0.5">
-          All trades executed by Artemis on your account
-        </p>
-      </div>
-      <TradeHistoryTable trades={trades} />
-    </div>
-  );
+  return <HistoryView trades={trades} />;
 }
