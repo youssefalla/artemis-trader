@@ -225,15 +225,9 @@ export default function AIChatPage() {
             transition={{ duration: 0.4 }}
             style={{ textAlign: "center", marginBottom: "2.5rem", zIndex: 1, width: "100%", maxWidth: 640 }}
           >
-            <div style={{ width: "100%", height: "3rem", marginBottom: "0.5rem" }}>
-              <VaporTextIn
-                text="How can I help today?"
-                font={{ fontFamily: "var(--font-display, sans-serif)", fontSize: "32px", fontWeight: 700 }}
-                color={dark ? "rgb(245,244,238)" : "rgb(26,16,0)"}
-                alignment="center"
-                duration={1.0}
-              />
-            </div>
+            <h1 className="font-display" style={{ fontSize: "2rem", fontWeight: 700, color: "var(--text-primary)", margin: "0 0 0.5rem", letterSpacing: "-0.03em" }}>
+              How can I help today?
+            </h1>
             <p style={{ fontSize: "0.875rem", color: "var(--text-secondary)", margin: 0 }}>
               Type a question or upload a chart for analysis
             </p>
