@@ -1,6 +1,7 @@
 "use client";
 
 import { useT } from "@/lib/i18n";
+import BlurWords from "@/components/ui/BlurWords";
 
 export default function CTABanner() {
   const { T } = useT();
@@ -19,7 +20,7 @@ export default function CTABanner() {
         <div style={{ position: "relative", maxWidth: "42rem" }}>
           <div className="font-mono" style={{ fontSize: "0.7rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "#D4AF37" }}>— Last call</div>
           <h2 className="font-display blur-headline no-line" data-blur="section" style={{ fontSize: "clamp(2.5rem, 6vw, 3.75rem)", lineHeight: 1, marginTop: "1rem", letterSpacing: "-0.03em", color: "var(--text-primary)" }}>
-            {T.cta.title}
+            <BlurWords text={T.cta.title} />
           </h2>
           <p style={{ marginTop: "1.5rem", color: "var(--text-secondary)", maxWidth: "32rem" }}>
             {T.cta.subtitle}

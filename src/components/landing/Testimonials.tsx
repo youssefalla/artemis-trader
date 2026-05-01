@@ -1,6 +1,7 @@
 "use client";
 
 import { useT } from "@/lib/i18n";
+import BlurWords from "@/components/ui/BlurWords";
 
 const Stars = () => (
   <div style={{ display: "flex", alignItems: "center", gap: "0.125rem" }}>
@@ -122,7 +123,7 @@ export default function Testimonials() {
         <div className="reveal-left">
           <div className="font-mono" style={{ fontSize: "0.7rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "#D4AF37" }}>— {T.testimonials.label}</div>
           <h2 className="font-display blur-headline" data-blur="section" style={{ fontSize: "clamp(2.5rem, 6vw, 3.75rem)", letterSpacing: "-0.03em", marginTop: "0.75rem", lineHeight: 1 }}>
-            {T.testimonials.title}
+            <BlurWords text={T.testimonials.title} />
           </h2>
         </div>
         <div className="reveal-right" style={{ display: "flex", alignItems: "center", gap: "0.75rem", fontSize: "0.875rem" }}>

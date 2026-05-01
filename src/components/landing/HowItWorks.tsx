@@ -1,6 +1,7 @@
 "use client";
 
 import { useT } from "@/lib/i18n";
+import BlurWords from "@/components/ui/BlurWords";
 
 export default function HowItWorks() {
   const { T } = useT();
@@ -17,7 +18,7 @@ export default function HowItWorks() {
         <div className="reveal" style={{ textAlign: "center", maxWidth: "36rem", margin: "0 auto 5rem" }}>
           <div className="font-mono" style={{ fontSize: "0.7rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "#D4AF37" }}>— {T.how.label}</div>
           <h2 className="font-display blur-headline" data-blur="section" style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)", letterSpacing: "-0.03em", marginTop: "0.75rem", lineHeight: 1 }}>
-            {T.how.title}
+            <BlurWords text={T.how.title} />
           </h2>
           <p style={{ marginTop: "1.25rem", color: "var(--text-secondary)" }}>{T.how.subtitle}</p>
         </div>

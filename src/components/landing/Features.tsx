@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useT } from "@/lib/i18n";
+import BlurWords from "@/components/ui/BlurWords";
 
 export default function Features() {
   const { T } = useT();
@@ -36,9 +37,9 @@ export default function Features() {
         <div className="reveal-left">
           <div className="font-mono" style={{ fontSize: "0.7rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "#D4AF37" }}>— {T.features.label}</div>
           <h2 className="font-display blur-headline" data-blur="section" style={{ fontSize: "clamp(2.5rem, 6vw, 3.75rem)", letterSpacing: "-0.03em", marginTop: "0.75rem", lineHeight: 1 }}>
-            {T.features.title1}
+            <BlurWords text={T.features.title1} />
             <br />
-            {T.features.title2}
+            <BlurWords text={T.features.title2} />
           </h2>
         </div>
         <p className="reveal-right" style={{ maxWidth: "26rem", color: "var(--text-secondary)", lineHeight: 1.7, fontSize: "1rem" }}>
