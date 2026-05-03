@@ -84,25 +84,34 @@ export default function LandingHero() {
   const posEurRef = useRef<HTMLSpanElement>(null);
   const posBtcRef = useRef<HTMLSpanElement>(null);
 
-  // Native RAF parallax — GPU composited, no React re-renders
+  // GPU-composited parallax — no layout reads inside scroll handler
   useEffect(() => {
     const bg = bgRef.current;
     const section = sectionRef.current;
     if (!bg || !section) return;
-    let raf: number | null = null;
-    const onScroll = () => {
-      if (raf) return;
-      raf = requestAnimationFrame(() => {
-        raf = null;
-        const rect = section.getBoundingClientRect();
-        if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-        const progress = Math.max(0, -rect.top / rect.height);
-        bg.style.transform = `translateY(${progress * 25}%)`;
-      });
+
+    // Measure once, outside scroll handler (no reflow during scroll)
+    let sectionBottom = 0;
+    const measure = () => {
+      const r = section.getBoundingClientRect();
+      sectionBottom = r.bottom + window.scrollY;
     };
+    measure();
+    window.addEventListener("resize", measure, { passive: true });
+
+    let raf: number | null = null;
+    const tick = () => {
+      raf = null;
+      const y = window.scrollY;
+      if (y > sectionBottom) return;          // section gone — skip
+      bg.style.transform = `translate3d(0,${y * 0.28}px,0)`;
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(tick); };
+
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", measure);
       if (raf) cancelAnimationFrame(raf);
     };
   }, []);
@@ -265,7 +274,8 @@ export default function LandingHero() {
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           willChange: "transform",
-          transform: "translateY(0%)",
+          transform: "translate3d(0,0,0)",
+          backfaceVisibility: "hidden",
         }}
       />
       {/* Background */}
