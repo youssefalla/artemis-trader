@@ -83,18 +83,19 @@ export default function LoadingScreen() {
 
   // ── First-visit: show once per session ──
   useEffect(() => {
-    if (sessionStorage.getItem("artemis-loaded")) {
-      // Not first visit — fire ready immediately so hero animates normally
+    function fireReady() {
+      (window as any).__artemisReady = true;
       window.dispatchEvent(new Event("artemis:ready"));
+    }
+
+    if (sessionStorage.getItem("artemis-loaded")) {
+      fireReady();
       return;
     }
     sessionStorage.setItem("artemis-loaded", "1");
     setState("showing");
     const exit = setTimeout(() => setState("exiting"), 2200);
-    const hide = setTimeout(() => {
-      setState("idle");
-      window.dispatchEvent(new Event("artemis:ready"));
-    }, 2600);
+    const hide = setTimeout(() => { setState("idle"); fireReady(); }, 2600);
     return () => { clearTimeout(exit); clearTimeout(hide); };
   }, []);
 

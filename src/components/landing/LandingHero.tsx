@@ -91,6 +91,7 @@ export default function LandingHero() {
       if (headlineRef.current) triggerBlurIn(headlineRef.current);
       if (particlesRef.current) buildParticles(particlesRef.current);
     }
+    if ((window as any).__artemisReady) { start(); return; }
     window.addEventListener("artemis:ready", start, { once: true });
     return () => window.removeEventListener("artemis:ready", start);
   }, []);

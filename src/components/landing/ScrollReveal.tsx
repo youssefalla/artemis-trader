@@ -56,6 +56,7 @@ export default function ScrollReveal() {
       blurHeadlines.forEach((el) => blurIo.observe(el));
     }
 
+    if ((window as any).__artemisReady) { setup(); return; }
     window.addEventListener("artemis:ready", setup, { once: true });
     return () => window.removeEventListener("artemis:ready", setup);
   }, []);
