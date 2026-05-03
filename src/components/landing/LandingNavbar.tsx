@@ -60,7 +60,7 @@ export default function LandingNavbar() {
   ];
 
   return (
-    <header style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 9999, padding: "0.75rem 1rem" }}>
+    <header style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 9999, padding: "0.75rem 1rem", WebkitTransform: "translate3d(0,0,0)", transform: "translate3d(0,0,0)", willChange: "transform" }}>
       <nav
         style={{
           maxWidth: "72rem",
