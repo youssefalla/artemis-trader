@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 function buildParticles(container: HTMLElement) {
   const count = 22;
@@ -64,6 +65,10 @@ function triggerBlurIn(el: HTMLElement) {
 }
 
 export default function LandingHero() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const particlesRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -222,7 +227,20 @@ export default function LandingHero() {
   );
 
   return (
-    <section className="hero-landing-section" style={{ position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "flex-start", paddingTop: "8rem", paddingBottom: "4rem", paddingLeft: "1.5rem", paddingRight: "1.5rem", overflow: "hidden" }}>
+    <section ref={sectionRef} className="hero-landing-section" style={{ position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "flex-start", paddingTop: "8rem", paddingBottom: "4rem", paddingLeft: "1.5rem", paddingRight: "1.5rem", overflow: "hidden" }}>
+      {/* Parallax background image */}
+      <motion.div
+        style={{
+          y: bgY,
+          position: "absolute",
+          inset: "-15% 0",
+          backgroundImage: "url('/ChatGPT Image May 3, 2026, 05_43_37 AM.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          willChange: "transform",
+        }}
+      />
       {/* Background */}
       <div className="hero-bg">
         <div className="hero-img-overlay" />
