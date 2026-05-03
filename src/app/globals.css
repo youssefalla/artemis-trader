@@ -901,6 +901,11 @@ body { overflow-x: clip; }
 
 /* ── Hero grid + mesh ────────────────────────── */
 .hero-landing-section {
+  background-image: url('/ChatGPT Image May 3, 2026, 05_43_37 AM.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   border-bottom-left-radius: 5rem;
   border-bottom-right-radius: 5rem;
 }

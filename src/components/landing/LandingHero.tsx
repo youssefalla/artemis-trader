@@ -65,7 +65,6 @@ function triggerBlurIn(el: HTMLElement) {
 
 export default function LandingHero() {
   const sectionRef = useRef<HTMLElement>(null);
-  const bgRef = useRef<HTMLDivElement>(null);
 
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const particlesRef = useRef<HTMLDivElement>(null);
@@ -84,37 +83,6 @@ export default function LandingHero() {
   const posEurRef = useRef<HTMLSpanElement>(null);
   const posBtcRef = useRef<HTMLSpanElement>(null);
 
-  // GPU-composited parallax — no layout reads inside scroll handler
-  useEffect(() => {
-    const bg = bgRef.current;
-    const section = sectionRef.current;
-    if (!bg || !section) return;
-
-    // Measure once, outside scroll handler (no reflow during scroll)
-    let sectionBottom = 0;
-    const measure = () => {
-      const r = section.getBoundingClientRect();
-      sectionBottom = r.bottom + window.scrollY;
-    };
-    measure();
-    window.addEventListener("resize", measure, { passive: true });
-
-    let raf: number | null = null;
-    const tick = () => {
-      raf = null;
-      const y = window.scrollY;
-      if (y > sectionBottom) return;          // section gone — skip
-      bg.style.transform = `translate3d(0,${y * 0.28}px,0)`;
-    };
-    const onScroll = () => { if (!raf) raf = requestAnimationFrame(tick); };
-
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", measure);
-      if (raf) cancelAnimationFrame(raf);
-    };
-  }, []);
 
   useEffect(() => {
     function start() {
@@ -263,21 +231,6 @@ export default function LandingHero() {
 
   return (
     <section ref={sectionRef} className="hero-landing-section" style={{ position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "flex-start", paddingTop: "8rem", paddingBottom: "4rem", paddingLeft: "1.5rem", paddingRight: "1.5rem", overflow: "hidden" }}>
-      {/* Parallax background image */}
-      <div
-        ref={bgRef}
-        style={{
-          position: "absolute",
-          inset: "-15% 0",
-          backgroundImage: "url('/ChatGPT Image May 3, 2026, 05_43_37 AM.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          willChange: "transform",
-          transform: "translate3d(0,0,0)",
-          backfaceVisibility: "hidden",
-        }}
-      />
       {/* Background */}
       <div className="hero-bg">
         <div className="hero-img-overlay" />
