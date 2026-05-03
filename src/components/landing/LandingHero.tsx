@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
 
 function buildParticles(container: HTMLElement) {
   const count = 22;
@@ -66,8 +65,7 @@ function triggerBlurIn(el: HTMLElement) {
 
 export default function LandingHero() {
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const bgRef = useRef<HTMLDivElement>(null);
 
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const particlesRef = useRef<HTMLDivElement>(null);
@@ -85,6 +83,29 @@ export default function LandingHero() {
   const kpiWinRef = useRef<HTMLSpanElement>(null);
   const posEurRef = useRef<HTMLSpanElement>(null);
   const posBtcRef = useRef<HTMLSpanElement>(null);
+
+  // Native RAF parallax — GPU composited, no React re-renders
+  useEffect(() => {
+    const bg = bgRef.current;
+    const section = sectionRef.current;
+    if (!bg || !section) return;
+    let raf: number | null = null;
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = null;
+        const rect = section.getBoundingClientRect();
+        if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+        const progress = Math.max(0, -rect.top / rect.height);
+        bg.style.transform = `translateY(${progress * 25}%)`;
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
 
   useEffect(() => {
     function start() {
@@ -234,9 +255,9 @@ export default function LandingHero() {
   return (
     <section ref={sectionRef} className="hero-landing-section" style={{ position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "flex-start", paddingTop: "8rem", paddingBottom: "4rem", paddingLeft: "1.5rem", paddingRight: "1.5rem", overflow: "hidden" }}>
       {/* Parallax background image */}
-      <motion.div
+      <div
+        ref={bgRef}
         style={{
-          y: bgY,
           position: "absolute",
           inset: "-15% 0",
           backgroundImage: "url('/ChatGPT Image May 3, 2026, 05_43_37 AM.png')",
@@ -244,6 +265,7 @@ export default function LandingHero() {
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
           willChange: "transform",
+          transform: "translateY(0%)",
         }}
       />
       {/* Background */}
