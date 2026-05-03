@@ -266,7 +266,7 @@ export default function LandingHero() {
             <span className="bw">You</span>
             <br />
             <span style={{ display: "inline-block" }}>
-              <em className="bw gold-shimmer not-italic">Sleep.</em>
+              <em className="bw gold-shimmer not-italic" style={{ textShadow: "none" }}>Sleep.</em>
               <span className="sleep-line" />
             </span>
           </h1>
