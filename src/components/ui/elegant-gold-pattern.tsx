@@ -71,7 +71,7 @@ export function GoldGradientBg({ children }: GoldGradientBgProps) {
           inset: 0,
           zIndex: 0,
           pointerEvents: "none",
-          opacity: dark ? 0.18 : 0.10,
+          opacity: dark ? 0 : 0.10,
           backgroundImage: `radial-gradient(circle at 1px 1px, ${dotColor} 1px, transparent 0)`,
           backgroundSize: "22px 22px",
         }}
