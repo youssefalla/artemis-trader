@@ -17,20 +17,19 @@ export default function Hero() {
         justifyContent: "center",
         overflow: "hidden",
         paddingTop: "4rem",
+        backgroundImage: "url('/ChatGPT Image May 3, 2026, 05_43_37 AM.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
       }}
     >
       <div
         style={{
           position: "absolute",
           inset: 0,
-          opacity: 0.15,
-          backgroundImage:
-            "linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
+          background: "rgba(0,0,0,0.35)",
         }}
       />
-      <div style={{ position: "absolute", top: "20%", left: "20%", width: "28rem", height: "28rem", borderRadius: "9999px", background: "#dc2626", opacity: 0.1, filter: "blur(100px)", pointerEvents: "none" }} />
-      <div style={{ position: "absolute", bottom: "20%", right: "20%", width: "20rem", height: "20rem", borderRadius: "9999px", background: "#7f1d1d", opacity: 0.12, filter: "blur(80px)", pointerEvents: "none" }} />
 
       <div className="section-container" style={{ position: "relative", zIndex: 10, textAlign: "center" }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem 1rem", borderRadius: "9999px", border: "1px solid var(--accent)", background: "var(--accent-glow)", color: "var(--accent)", fontSize: "0.875rem", fontWeight: 500, marginBottom: "2rem" }}>
