@@ -17,47 +17,47 @@ function triggerBlurIn(el: HTMLElement) {
 
 export default function ScrollReveal() {
   useEffect(() => {
-    const targets = document.querySelectorAll<HTMLElement>(
-      ".reveal, .reveal-left, .reveal-right, .reveal-scale, .stagger"
-    );
+    function setup() {
+      const targets = document.querySelectorAll<HTMLElement>(
+        ".reveal, .reveal-left, .reveal-right, .reveal-scale, .stagger"
+      );
 
-    if (!("IntersectionObserver" in window)) {
-      targets.forEach((el) => el.classList.add("in"));
-      document.querySelectorAll<HTMLElement>("[data-blur='section']").forEach(triggerBlurIn);
-      return;
+      if (!("IntersectionObserver" in window)) {
+        targets.forEach((el) => el.classList.add("in"));
+        document.querySelectorAll<HTMLElement>("[data-blur='section']").forEach(triggerBlurIn);
+        return;
+      }
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("in");
+              io.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+      );
+      targets.forEach((el) => io.observe(el));
+
+      const blurHeadlines = document.querySelectorAll<HTMLElement>("[data-blur='section']");
+      const blurIo = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              triggerBlurIn(entry.target as HTMLElement);
+              blurIo.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.2, rootMargin: "0px 0px -5% 0px" }
+      );
+      blurHeadlines.forEach((el) => blurIo.observe(el));
     }
 
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("in");
-            io.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
-    );
-    targets.forEach((el) => io.observe(el));
-
-    const blurHeadlines = document.querySelectorAll<HTMLElement>("[data-blur='section']");
-    const blurIo = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            triggerBlurIn(entry.target as HTMLElement);
-            blurIo.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.2, rootMargin: "0px 0px -5% 0px" }
-    );
-    blurHeadlines.forEach((el) => blurIo.observe(el));
-
-    return () => {
-      io.disconnect();
-      blurIo.disconnect();
-    };
+    window.addEventListener("artemis:ready", setup, { once: true });
+    return () => window.removeEventListener("artemis:ready", setup);
   }, []);
 
   return null;

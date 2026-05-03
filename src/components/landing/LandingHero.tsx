@@ -87,8 +87,12 @@ export default function LandingHero() {
   const posBtcRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    if (headlineRef.current) triggerBlurIn(headlineRef.current);
-    if (particlesRef.current) buildParticles(particlesRef.current);
+    function start() {
+      if (headlineRef.current) triggerBlurIn(headlineRef.current);
+      if (particlesRef.current) buildParticles(particlesRef.current);
+    }
+    window.addEventListener("artemis:ready", start, { once: true });
+    return () => window.removeEventListener("artemis:ready", start);
   }, []);
 
   useEffect(() => {
