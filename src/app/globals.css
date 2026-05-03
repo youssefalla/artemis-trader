@@ -909,6 +909,14 @@ body { overflow-x: clip; }
   border-bottom-left-radius: 5rem;
   border-bottom-right-radius: 5rem;
 }
+.hero-clip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-bottom-left-radius: 5rem;
+  border-bottom-right-radius: 5rem;
+  pointer-events: none;
+}
 .hero-img-overlay {
   position: absolute;
   inset: 0;

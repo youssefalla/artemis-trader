@@ -230,18 +230,20 @@ export default function LandingHero() {
   );
 
   return (
-    <section ref={sectionRef} className="hero-landing-section" style={{ position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "flex-start", paddingTop: "8rem", paddingBottom: "4rem", paddingLeft: "1.5rem", paddingRight: "1.5rem", overflow: "hidden" }}>
-      {/* Background */}
-      <div className="hero-bg">
-        <div className="hero-img-overlay" />
-        <div className="particles" ref={particlesRef} />
-        <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0 }} viewBox="0 0 1200 800" preserveAspectRatio="none" className="dark:opacity-35">
-          <g stroke="#D4AF37" strokeWidth=".4" fill="none" opacity=".7">
-            <path d="M0,600 C200,520 400,640 700,540 S 1100,500 1200,560" />
-            <path d="M0,300 C300,240 500,360 800,260 S 1100,220 1200,280" />
-            <path d="M0,720 C150,700 350,760 600,700 S 1000,720 1200,690" />
-          </g>
-        </svg>
+    <section ref={sectionRef} className="hero-landing-section" style={{ position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "flex-start", paddingTop: "8rem", paddingBottom: "4rem", paddingLeft: "1.5rem", paddingRight: "1.5rem" }}>
+      {/* Clip wrapper — overflow:hidden lives here, NOT on the section, so background-attachment:fixed stays compositor-threaded */}
+      <div className="hero-clip">
+        <div className="hero-bg">
+          <div className="hero-img-overlay" />
+          <div className="particles" ref={particlesRef} />
+          <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0 }} viewBox="0 0 1200 800" preserveAspectRatio="none" className="dark:opacity-35">
+            <g stroke="#D4AF37" strokeWidth=".4" fill="none" opacity=".7">
+              <path d="M0,600 C200,520 400,640 700,540 S 1100,500 1200,560" />
+              <path d="M0,300 C300,240 500,360 800,260 S 1100,220 1200,280" />
+              <path d="M0,720 C150,700 350,760 600,700 S 1000,720 1200,690" />
+            </g>
+          </svg>
+        </div>
       </div>
 
       <div style={{ position: "relative", maxWidth: "72rem", margin: "0 auto", width: "100%", display: "grid", gap: "3rem", alignItems: "center" }} className="lg:grid-cols-2">
