@@ -338,7 +338,7 @@ export default function LandingHero() {
                   subRef: null, sub: "142/209", subClass: "", suffix: <span style={{ fontSize: "0.75rem", color: "#D4AF37" }}>%</span>
                 },
               ].map(({ label, prefix, mainRef, main, subRef, sub, subClass, suffix }) => (
-                <div key={label} style={{ borderRadius: "0.75rem", border: "1px solid rgba(0,0,0,0.05)", padding: "0.75rem", background: "var(--surface)" }}>
+                <div key={label} style={{ borderRadius: "0.75rem", border: "1px solid rgba(255,255,255,0.55)", padding: "0.75rem", background: "rgba(255,255,255,0.30)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}>
                   <div className="font-mono" style={{ fontSize: "0.6rem", textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--text-secondary)", marginBottom: "0.25rem" }}>{label}</div>
                   <div className="font-display" style={{ fontSize: "1.5rem" }}>
                     {prefix}<span ref={mainRef} className="kpi-num">{main}</span>{suffix}
@@ -393,7 +393,7 @@ export default function LandingHero() {
                 { pair: "EUR/USD", barsRef: barsEurRef, pctRef: posEurRef, initPct: "+0.42%" },
                 { pair: "XAU/USD", barsRef: barsBtcRef, pctRef: posBtcRef, initPct: "+1.18%" },
               ].map(({ pair, barsRef, pctRef, initPct }) => (
-                <div key={pair} style={{ borderRadius: "0.75rem", border: "1px solid rgba(0,0,0,0.05)", padding: "0.75rem", background: "var(--surface)" }}>
+                <div key={pair} style={{ borderRadius: "0.75rem", border: "1px solid rgba(255,255,255,0.55)", padding: "0.75rem", background: "rgba(255,255,255,0.30)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "0.75rem" }}>
                     <span className="font-mono">{pair}</span>
                     <span ref={pctRef} className="kpi-num kpi-up font-mono">{initPct}</span>
