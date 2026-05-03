@@ -222,9 +222,10 @@ export default function LandingHero() {
   );
 
   return (
-    <section style={{ position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "flex-start", paddingTop: "8rem", paddingBottom: "4rem", paddingLeft: "1.5rem", paddingRight: "1.5rem", overflow: "hidden", backgroundImage: "url('/ChatGPT Image May 3, 2026, 05_43_37 AM.png')", backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat" }}>
+    <section className="hero-landing-section" style={{ position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "flex-start", paddingTop: "8rem", paddingBottom: "4rem", paddingLeft: "1.5rem", paddingRight: "1.5rem", overflow: "hidden" }}>
       {/* Background */}
-      <div className="hero-bg" style={{ background: "rgba(255,255,255,0.18)" }}>
+      <div className="hero-bg">
+        <div className="hero-img-overlay" />
         <div className="particles" ref={particlesRef} />
         <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0 }} viewBox="0 0 1200 800" preserveAspectRatio="none" className="dark:opacity-35">
           <g stroke="#D4AF37" strokeWidth=".4" fill="none" opacity=".7">
