@@ -257,7 +257,7 @@ export default function LandingHero() {
           <h1
             ref={headlineRef}
             className="font-display blur-headline no-line"
-            style={{ marginTop: "1.5rem", fontSize: "clamp(2.75rem, 6.2vw, 5.25rem)", lineHeight: 1.02, letterSpacing: "-0.03em", fontWeight: 800, color: "#ffffff" }}
+            style={{ marginTop: "1.5rem", fontSize: "clamp(2.75rem, 6.2vw, 5.25rem)", lineHeight: 1.02, letterSpacing: "-0.03em", fontWeight: 800, color: "#ffffff", textShadow: "0 2px 12px rgba(0,0,0,0.18), 0 1px 3px rgba(0,0,0,0.12)" }}
           >
             <span className="bw">Make</span>{" "}
             <span className="bw">Money</span>
