@@ -109,7 +109,7 @@ export default function LandingNavbar() {
 
         {/* Actions */}
         <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginLeft: "auto" }} className="md:ml-0">
-          <LanguageSwitcher />
+          <span className="hidden md:block"><LanguageSwitcher /></span>
 
           <button
             onClick={toggle}
@@ -130,7 +130,7 @@ export default function LandingNavbar() {
 
           <Link
             href="/login"
-            className="btn-gold"
+            className="btn-gold hidden md:block"
             style={{ borderRadius: "9999px", padding: "0.625rem 1.25rem", fontSize: "0.875rem", fontWeight: 600, textDecoration: "none" }}
           >
             {T.nav.login}
@@ -141,7 +141,7 @@ export default function LandingNavbar() {
         <button
           className="md:hidden"
           onClick={() => setMobileOpen(!mobileOpen)}
-          style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-secondary)", padding: "0.25rem", marginLeft: "auto" }}
+          style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-secondary)", padding: "0.25rem" }}
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             {mobileOpen
