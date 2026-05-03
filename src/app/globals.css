@@ -905,9 +905,14 @@ body { overflow-x: clip; }
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  background-attachment: scroll; /* mobile-safe default */
   border-bottom-left-radius: 5rem;
   border-bottom-right-radius: 5rem;
+}
+@media (min-width: 768px) {
+  .hero-landing-section {
+    background-attachment: fixed; /* parallax only on desktop */
+  }
 }
 .hero-clip {
   position: absolute;
