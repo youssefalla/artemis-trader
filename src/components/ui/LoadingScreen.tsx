@@ -94,8 +94,8 @@ export default function LoadingScreen() {
     }
     sessionStorage.setItem("artemis-loaded", "1");
     setState("showing");
-    const exit = setTimeout(() => setState("exiting"), 2200);
-    const hide = setTimeout(() => { setState("idle"); fireReady(); }, 2600);
+    const exit = setTimeout(() => setState("exiting"), 1000);
+    const hide = setTimeout(() => { setState("idle"); fireReady(); }, 1400);
     return () => { clearTimeout(exit); clearTimeout(hide); };
   }, []);
 
