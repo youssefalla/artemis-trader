@@ -81,6 +81,16 @@ export default function LoadingScreen() {
   // "idle" | "showing" | "exiting"
   const [state, setState] = useState<"idle" | "showing" | "exiting">("idle");
 
+  // ── First-visit: show once per session ──
+  useEffect(() => {
+    if (sessionStorage.getItem("artemis-loaded")) return;
+    sessionStorage.setItem("artemis-loaded", "1");
+    setState("showing");
+    const exit = setTimeout(() => setState("exiting"), 2200);
+    const hide = setTimeout(() => setState("idle"),    2600);
+    return () => { clearTimeout(exit); clearTimeout(hide); };
+  }, []);
+
   // ── Navigation: show on link click, hide when pathname settles ──
   useEffect(() => {
     function onLinkClick(e: MouseEvent) {
