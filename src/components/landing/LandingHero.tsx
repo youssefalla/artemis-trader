@@ -354,7 +354,7 @@ export default function LandingHero() {
             </div>
 
             {/* Equity chart */}
-            <div className="dash-row" style={{ marginTop: "1rem", borderRadius: "0.75rem", border: "1px solid rgba(0,0,0,0.05)", padding: "0.75rem", background: "var(--surface)" }}>
+            <div className="dash-row" style={{ marginTop: "1rem", borderRadius: "0.75rem", border: "1px solid rgba(255,255,255,0.55)", padding: "0.75rem", background: "rgba(255,255,255,0.30)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.5rem" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                   <span style={{ fontSize: "0.75rem", fontWeight: 500 }}>Equity Curve</span>
