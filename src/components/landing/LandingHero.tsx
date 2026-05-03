@@ -82,12 +82,16 @@ export default function LandingHero() {
   const kpiWinRef = useRef<HTMLSpanElement>(null);
   const posEurRef = useRef<HTMLSpanElement>(null);
   const posBtcRef = useRef<HTMLSpanElement>(null);
-
+  const bgFadeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function start() {
       if (headlineRef.current) triggerBlurIn(headlineRef.current);
       if (particlesRef.current) buildParticles(particlesRef.current);
+      // Fade in background image
+      if (bgFadeRef.current) {
+        bgFadeRef.current.style.opacity = "0";
+      }
     }
     if ((window as any).__artemisReady) { start(); return; }
     window.addEventListener("artemis:ready", start, { once: true });
@@ -246,7 +250,21 @@ export default function LandingHero() {
         </div>
       </div>
 
-      <div style={{ position: "relative", maxWidth: "72rem", margin: "0 auto", width: "100%", display: "grid", gap: "3rem", alignItems: "center" }} className="lg:grid-cols-2">
+      {/* Background fade-in cover — starts opaque, fades out on artemis:ready */}
+      <div
+        ref={bgFadeRef}
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "var(--background)",
+          opacity: 1,
+          transition: "opacity 1.2s cubic-bezier(0.4,0,0.2,1)",
+          pointerEvents: "none",
+          zIndex: 1,
+        }}
+      />
+
+      <div style={{ position: "relative", zIndex: 2, maxWidth: "72rem", margin: "0 auto", width: "100%", display: "grid", gap: "3rem", alignItems: "center" }} className="lg:grid-cols-2">
         {/* Left: text */}
         <div className="reveal-left">
           <div className="font-mono" style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--text-secondary)", border: "1px solid rgba(10,10,10,0.1)", borderRadius: "9999px", padding: "0.375rem 0.75rem" }}>
