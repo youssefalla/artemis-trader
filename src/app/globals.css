@@ -46,6 +46,10 @@
   --button-ripple-color: rgba(255, 255, 255, 0.18);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html, body {
   background-color: var(--background);
   color: var(--text-primary);
@@ -57,7 +61,7 @@ html, body {
 body { overflow-x: hidden; }
 
 *, *::before, *::after {
-  transition: background-color 0.4s ease, border-color 0.9s cubic-bezier(0.22,0.61,0.36,1), color 0.35s ease, box-shadow 0.9s cubic-bezier(0.22,0.61,0.36,1);
+  transition: background-color 0.4s ease, color 0.35s ease;
 }
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
@@ -117,6 +121,8 @@ body { overflow-x: hidden; }
     0 1px 4px rgba(0,0,0,0.06),
     inset 2px 2px 1px rgba(255,255,255,0.90),
     inset -1px -1px 1px rgba(255,255,255,0.60);
+  will-change: transform;
+  transform: translateZ(0);
 }
 .dark .glass {
   background: rgba(10,10,14,0.90);
@@ -905,14 +911,10 @@ body { overflow-x: hidden; }
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: scroll; /* mobile-safe default */
+  background-attachment: scroll;
   border-bottom-left-radius: 5rem;
   border-bottom-right-radius: 5rem;
-}
-@media (min-width: 768px) {
-  .hero-landing-section {
-    background-attachment: fixed; /* parallax only on desktop */
-  }
+  will-change: transform;
 }
 .hero-clip {
   position: absolute;
@@ -939,6 +941,7 @@ body { overflow-x: hidden; }
     radial-gradient(45% 40% at 60% 80%, rgba(0,0,0,.04), transparent 60%);
   filter: blur(40px);
   animation: drift 22s ease-in-out infinite alternate;
+  will-change: transform;
 }
 .dark .hero-bg .mesh {
   background:
