@@ -108,7 +108,12 @@ export default function DashboardView({ profile, botSettings, trades }: Props) {
             isVerifiedAffiliate={profile?.is_verified_affiliate ?? false}
             subscriptionStatus={profile?.subscription_status ?? "inactive"}
           />
-          <MT5ConnectionForm currentXmAccountId={profile?.xm_account_id ?? null} />
+          <MT5ConnectionForm
+            currentXmAccountId={profile?.xm_account_id ?? null}
+            currentBroker={(profile as any)?.broker ?? null}
+            currentMt5Login={(profile as any)?.mt5_login ?? null}
+            currentMt5Server={(profile as any)?.mt5_server ?? null}
+          />
         </div>
         <div className="xl:col-span-2">
           <TradeHistoryTable trades={trades} />
