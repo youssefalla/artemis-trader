@@ -38,12 +38,6 @@ export default function OnboardingPage() {
   const [brokerOpened, setBrokerOpened] = useState<"xm" | "exness" | null>(null);
   const [loading, setLoading] = useState(false);
 
-  function handleOpenBroker(broker: "xm" | "exness") {
-    const link = broker === "xm" ? XM_AFFILIATE_LINK : EXNESS_AFFILIATE_LINK;
-    window.open(link, "_blank", "noopener,noreferrer");
-    setBrokerOpened(broker);
-  }
-
   function handleContinue() {
     setLoading(true);
     // Set cookie so proxy knows onboarding is done — never redirect here again
@@ -204,8 +198,11 @@ export default function OnboardingPage() {
                         </p>
                         <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", flexWrap: "wrap" }}>
                           {/* XM */}
-                          <button
-                            onClick={() => handleOpenBroker("xm")}
+                          <a
+                            href={XM_AFFILIATE_LINK}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => setBrokerOpened("xm")}
                             style={{
                               borderRadius: "9999px",
                               padding: "0.625rem 1.25rem",
@@ -215,6 +212,7 @@ export default function OnboardingPage() {
                               alignItems: "center",
                               gap: "0.5rem",
                               cursor: "pointer",
+                              textDecoration: "none",
                               background: brokerOpened === "xm"
                                 ? "linear-gradient(180deg,#E6C75A 0%,#D4AF37 55%,#B8941F 100%)"
                                 : "rgba(212,175,55,0.12)",
@@ -226,11 +224,14 @@ export default function OnboardingPage() {
                             <ExternalLink size={14} />
                             Open XM Account
                             {brokerOpened === "xm" && <CheckCircle size={13} />}
-                          </button>
+                          </a>
 
                           {/* Exness */}
-                          <button
-                            onClick={() => handleOpenBroker("exness")}
+                          <a
+                            href={EXNESS_AFFILIATE_LINK}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            onClick={() => setBrokerOpened("exness")}
                             style={{
                               borderRadius: "9999px",
                               padding: "0.625rem 1.25rem",
@@ -240,6 +241,7 @@ export default function OnboardingPage() {
                               alignItems: "center",
                               gap: "0.5rem",
                               cursor: "pointer",
+                              textDecoration: "none",
                               background: brokerOpened === "exness"
                                 ? "linear-gradient(180deg,#E6C75A 0%,#D4AF37 55%,#B8941F 100%)"
                                 : "rgba(212,175,55,0.12)",
@@ -251,7 +253,7 @@ export default function OnboardingPage() {
                             <ExternalLink size={14} />
                             Open Exness Account
                             {brokerOpened === "exness" && <CheckCircle size={13} />}
-                          </button>
+                          </a>
                         </div>
 
                         {brokerOpened && (
