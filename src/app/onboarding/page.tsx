@@ -261,7 +261,7 @@ export default function OnboardingPage() {
                           <button
                             onClick={() => setAccountConfirmed(true)}
                             style={{
-                              alignSelf: "flex-start",
+                              alignSelf: "center",
                               borderRadius: "9999px",
                               padding: "0.625rem 1.25rem",
                               fontSize: "0.875rem",
