@@ -36,6 +36,7 @@ const steps = [
 export default function OnboardingPage() {
   const router = useRouter();
   const [brokerOpened, setBrokerOpened] = useState<"xm" | "exness" | null>(null);
+  const [accountConfirmed, setAccountConfirmed] = useState(false);
   const [loading, setLoading] = useState(false);
 
   function handleContinue() {
@@ -256,10 +257,33 @@ export default function OnboardingPage() {
                           </a>
                         </div>
 
-                        {brokerOpened && (
-                          <span style={{ fontSize: "0.8125rem", color: "#D4AF37", display: "flex", alignItems: "center", gap: "0.375rem" }}>
+                        {brokerOpened && !accountConfirmed && (
+                          <button
+                            onClick={() => setAccountConfirmed(true)}
+                            style={{
+                              alignSelf: "flex-start",
+                              borderRadius: "9999px",
+                              padding: "0.625rem 1.25rem",
+                              fontSize: "0.875rem",
+                              fontWeight: 600,
+                              display: "inline-flex",
+                              alignItems: "center",
+                              gap: "0.5rem",
+                              cursor: "pointer",
+                              background: "rgba(0,212,160,0.12)",
+                              border: "1px solid rgba(0,212,160,0.35)",
+                              color: "var(--green, #00d4a0)",
+                              transition: "all 0.2s",
+                            }}
+                          >
+                            <CheckCircle size={14} />
+                            I've created my account
+                          </button>
+                        )}
+                        {accountConfirmed && (
+                          <span style={{ fontSize: "0.8125rem", color: "var(--green, #00d4a0)", display: "flex", alignItems: "center", gap: "0.375rem" }}>
                             <CheckCircle size={13} />
-                            Link opened — complete your registration then come back
+                            Account confirmed — you're ready to go!
                           </span>
                         )}
                       </div>
@@ -287,8 +311,8 @@ export default function OnboardingPage() {
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.75rem" }}>
           <button
             onClick={handleContinue}
-            disabled={loading}
-            className="btn-gold"
+            disabled={loading || !accountConfirmed}
+            className={accountConfirmed ? "btn-gold" : ""}
             style={{
               borderRadius: "9999px",
               padding: "0.875rem 2rem",
@@ -297,16 +321,19 @@ export default function OnboardingPage() {
               display: "inline-flex",
               alignItems: "center",
               gap: "0.625rem",
-              cursor: "pointer",
+              cursor: accountConfirmed ? "pointer" : "not-allowed",
               border: "none",
               opacity: loading ? 0.7 : 1,
+              background: accountConfirmed ? undefined : "rgba(255,255,255,0.08)",
+              color: accountConfirmed ? undefined : "rgba(245,244,238,0.30)",
+              transition: "all 0.3s",
             }}
           >
             {loading ? <Loader2 size={16} className="animate-spin" /> : <ArrowRight size={16} />}
             {loading ? "Loading…" : "Go to Dashboard"}
           </button>
           <p style={{ fontSize: "0.8125rem", color: "rgba(245,244,238,0.35)", margin: 0 }}>
-            You can connect your XM account later from the dashboard
+            {accountConfirmed ? "You're all set — let's go!" : "Open a broker account above to continue"}
           </p>
         </div>
       </div>
